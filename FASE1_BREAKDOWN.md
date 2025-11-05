@@ -63,10 +63,24 @@
 - [ ] Task 8.2: Testes LockManager
 - [ ] Task 8.3: Testes Adapters
 
+**Checklist adicional de cobertura obrigatória**:
+- [ ] CommandExecutor – simular timeout, falhas de retorno, execução assíncrona
+- [ ] OperationQueue – cenários de concorrência (read vs mutation), bloqueio e desbloqueio
+- [ ] Adapters NPM/Pip – mocks de comandos, parsing de saída, regressões de erro
+- [ ] Endpoints críticos – smoke tests `/packages` (uninstall) e `/snapshot`
+
 ### Documentation (Tasks 31-33)
 - [ ] Task 9.1: SECURITY.md
 - [ ] Task 9.2: LIMITATIONS.md
 - [ ] Task 9.3: SETUP_PATH.md
+
+## ⏱️ Cronograma Sprint Fase 1 (5 dias úteis)
+
+- **Dia 1 – Preparação & Infraestrutura**: criar diretórios base, configurar tooling inicial (venv, npm, lint/test placeholders), preparar scripts auxiliares em `scripts/setup/`, validar que `.gitignore` e `README.md` mantêm histórico.
+- **Dia 2 – Camada de Segurança**: implementar `ValidationLayer`, iniciar `LockManager`, definir stubs de testes com cobertura mínima acordada, escrever notas sobre compatibilidade multi-plataforma.
+- **Dia 3 – Core Backend**: finalizar `LockManager`, desenvolver `OperationQueue` com testes assíncronos, criar `CommandExecutor` com harness de timeout, iniciar abstrações de storage/snapshot.
+- **Dia 4 – API & Frontend MVP**: expor endpoints principais (`/discover`, `/managers`, `/packages`, `/path`, `/snapshot`), construir layout React com componentes principais e estados mockados.
+- **Dia 5 – Qualidade & Documentação**: reforçar testes (CommandExecutor, OperationQueue, adapters), produzir `SECURITY.md`, `LIMITATIONS.md`, `SETUP_PATH.md`, preparar smoke manual e backlog Fase 2.
 
 ---
 
@@ -86,64 +100,79 @@
 **Descrição**:
 Criar estrutura completa de pastas e ficheiros iniciais do projeto.
 
+> **Boas práticas**: sempre que possível, encapsular comandos repetíveis em scripts (`scripts/setup/`) para garantir reprodutibilidade e evitar sobrescritas acidentais.
+
+**Nota**: Trabalhar diretamente na raiz do repositório (`Package_Audit_Dashboard/`) — evitar criar diretório adicional com o mesmo nome.
+
 **Estrutura a Criar**:
 ```
-package-audit-dashboard/
-├── frontend/
-│   ├── src/
-│   │   ├── components/
-│   │   ├── hooks/
-│   │   ├── store/
-│   │   ├── types/
-│   │   ├── App.tsx
-│   │   └── main.tsx
-│   ├── package.json
-│   ├── tsconfig.json
-│   ├── vite.config.ts
-│   └── index.html
-│
-├── backend/
-│   ├── app/
-│   │   ├── __init__.py
-│   │   ├── main.py
-│   │   ├── routers/
-│   │   │   └── __init__.py
-│   │   ├── adapters/
-│   │   │   └── __init__.py
-│   │   ├── analysis/
-│   │   │   └── __init__.py
-│   │   ├── core/
-│   │   │   └── __init__.py
-│   │   ├── models/
-│   │   │   └── __init__.py
-│   │   └── storage/
-│   │       └── __init__.py
-│   ├── tests/
+frontend/
+├── src/
+│   ├── components/
+│   ├── hooks/
+│   ├── store/
+│   ├── types/
+│   ├── App.tsx
+│   └── main.tsx
+├── package.json
+├── tsconfig.json
+├── vite.config.ts
+└── index.html
+
+backend/
+├── app/
+│   ├── __init__.py
+│   ├── main.py
+│   ├── routers/
 │   │   └── __init__.py
-│   ├── requirements.txt
-│   └── pyproject.toml
-│
-├── cli/
-│   └── audit_cli/
+│   ├── adapters/
+│   │   └── __init__.py
+│   ├── analysis/
+│   │   └── __init__.py
+│   ├── core/
+│   │   └── __init__.py
+│   ├── models/
+│   │   └── __init__.py
+│   └── storage/
 │       └── __init__.py
-│
-├── docs/
-│   └── README.md
-│
-├── .gitignore
-├── README.md
-└── LICENSE
+├── tests/
+│   └── __init__.py
+├── requirements.txt
+└── pyproject.toml
+
+cli/
+└── audit_cli/
+    └── __init__.py
+
+docs/
+└── README.md
+
+.gitignore
+README.md
+LICENSE
 ```
 
 **Comandos**:
 ```bash
-# Criar estrutura
-mkdir -p package-audit-dashboard/{frontend/src/{components,hooks,store,types},backend/app/{routers,adapters,analysis,core,models,storage},backend/tests,cli/audit_cli,docs}
+# Criar estrutura base (ignorar diretórios já existentes)
+mkdir -p frontend/src/{components,hooks,store,types}
+mkdir -p backend/app/{routers,adapters,analysis,core,models,storage}
+mkdir -p backend/tests cli/audit_cli docs
+mkdir -p scripts/setup
 
-cd package-audit-dashboard
+# Garantir ficheiros __init__.py
+touch backend/app/__init__.py \
+      backend/app/routers/__init__.py \
+      backend/app/adapters/__init__.py \
+      backend/app/analysis/__init__.py \
+      backend/app/core/__init__.py \
+      backend/app/models/__init__.py \
+      backend/app/storage/__init__.py \
+      backend/tests/__init__.py \
+      cli/audit_cli/__init__.py
 
-# Criar .gitignore
-cat > .gitignore << 'EOF'
+# Atualizar .gitignore existente (merge manual, não substituir)
+cat > scripts/setup/gitignore.append <<'EOF'
 # Python
 __pycache__/
 *.py[cod]
@@ -179,38 +208,38 @@ Thumbs.db
 .cache/
 EOF
 
-# Criar README básico
-cat > README.md << 'EOF'
-# Package Audit Dashboard
+# Revisar e incorporar manualmente:
+cat scripts/setup/gitignore.append
 
-Dashboard for auditing and managing system package managers.
+# Acrescentar secção de setup ao README atual (apenas se faltar)
+cat >> README.md <<'EOF'
 
-## Setup
+## Desenvolvimento Rápido
 
 ### Backend
-```bash
+\`\`\`bash
 cd backend
 pip install -r requirements.txt
 uvicorn app.main:app --reload
-```
+\`\`\`
 
 ### Frontend
-```bash
+\`\`\`bash
 cd frontend
 npm install
 npm run dev
-```
-
-## License
-MIT
+\`\`\`
 EOF
 ```
 
+> **Nota**: Rever diffs antes de confirmar — manter conteúdos existentes em `.gitignore` e `README.md`, integrando apenas as entradas/sectores em falta. Para automação futura, planear script em `scripts/setup/bootstrap_structure.py` que gere ficheiros auxiliares (ex.: `gitignore.append`) em vez de sobrescrever diretamente.
+
 **Critérios de Aceitação**:
 - [ ] Estrutura de pastas criada
-- [ ] .gitignore configurado
-- [ ] README.md criado
+- [ ] .gitignore atualizado sem substituir conteúdo existente
+- [ ] README.md enriquecido mantendo secções já existentes
 - [ ] Todos os __init__.py criados
+- [ ] Scripts auxiliares prontos em `scripts/setup/`
 
 ---
 
@@ -1161,11 +1190,13 @@ class LockManager:
     """
     File-based lock manager for operation serialization.
     
-    Features:
-    - Prevents race conditions
-    - Auto-cleanup on process exit
-    - Stale lock detection (30s timeout)
-    - Lock info tracking
+Features:
+- Prevents race conditions
+- Auto-cleanup on process exit
+- Stale lock detection (30s timeout)
+- Lock info tracking
+
+⚠️ **Compatibilidade**: verificar `signal.signal` no Windows/macOS; definir fallback/documentação caso os handlers tenham de ser registados apenas no processo principal ou substituídos por mecanismos alternativos.
     """
     
     LOCK_FILE = Path.home() / ".package-audit" / ".lock"
@@ -1501,6 +1532,7 @@ pytest tests/test_locking.py -v --cov=app.core.locking
 - [ ] Deteta locks stale
 - [ ] Auto-cleanup on exit
 - [ ] Previne race conditions
+- [ ] Handlers de sinal validados em Windows/macOS (fallback documentado se necessário)
 
 ---
 
@@ -1600,6 +1632,7 @@ def get_operation_queue() -> OperationQueue:
 - [ ] Integra com LockManager
 - [ ] Mutations serializadas
 - [ ] Reads concorrentes
+- [ ] Testes unitários cobrindo sucesso, bloqueio e propagação de erros
 
 ---
 
@@ -1760,6 +1793,7 @@ class CommandExecutor:
 - [ ] Timeout configurável
 - [ ] Async e sync versions
 - [ ] Logs adequados
+- [ ] Testes unitários para cenários de sucesso, timeout e falha de comando (sync e async)
 
 ---
 

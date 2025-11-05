@@ -1,0 +1,39 @@
+# Documentos auxiliares locais
+AGENTS.md
+CLAUDE.md
+GEMINI.md
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+.venv/
+*.egg-info/
+dist/
+build/
+
+# Node
+node_modules/
+dist/
+.cache/
+*.log
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Sistema Operativo
+.DS_Store
+Thumbs.db
+
+# Projeto
+.package-audit/
+*.lock
+.cache/
+data/
