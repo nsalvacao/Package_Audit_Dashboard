@@ -1,0 +1,42 @@
+# Core Web Framework
+fastapi==0.109.0
+uvicorn[standard]==0.27.0
+pydantic==2.5.3
+pydantic-settings==2.1.0
+
+# Testing
+pytest==7.4.4
+pytest-asyncio==0.23.3
+pytest-cov==4.1.0
+
+# CLI Framework
+typer==0.9.0
+rich==13.7.0
+
+# Vector Database & AI (ChromaDB sync)
+chromadb==0.4.22
+tokenizers==0.15.0
+onnxruntime==1.16.3
+duckdb==0.9.2
+
+# Observability
+opentelemetry-api==1.22.0
+opentelemetry-sdk==1.22.0
+opentelemetry-instrumentation==0.43b0
+
+# Security & Utilities
+bcrypt==4.1.2
+chroma-hnswlib==0.7.3
+
+# Cloud & Orchestration (optional)
+kubernetes==29.0.0
+grpcio==1.60.0
+
+# Python Compatibility
+importlib-resources==6.1.1; python_version < "3.9"
+
+# Development Tools (optional - uncomment if needed)
+# black==24.1.1
+# flake8==7.0.0
+# mypy==1.8.0
+# pre-commit==3.6.0
