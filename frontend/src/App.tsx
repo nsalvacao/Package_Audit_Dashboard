@@ -30,7 +30,7 @@ function App() {
         </main>
 
         <footer className="mt-12 py-6 text-center text-sm text-gray-500 border-t">
-          <p>Package Audit Dashboard v0.1.0 - MVP Phase 1</p>
+          <p>Package Audit Dashboard v0.2.0 - Phase 2 Complete</p>
         </footer>
       </div>
     </QueryClientProvider>
