@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import PackageList from './PackageList'
 
 interface Manager {
   id: string
@@ -47,13 +48,8 @@ function ManagerCard({ manager }: ManagerCardProps) {
         </button>
 
         {isExpanded && (
-          <div className="mt-3 p-4 bg-gray-50 rounded-md">
-            <p className="text-sm text-gray-600 italic">
-              Package list functionality will be implemented in Phase 2
-            </p>
-            <p className="text-xs text-gray-500 mt-2">
-              Endpoint: GET /api/managers/{manager.id}/packages
-            </p>
+          <div className="mt-3">
+            <PackageList managerId={manager.id} managerName={manager.name} />
           </div>
         )}
       </div>

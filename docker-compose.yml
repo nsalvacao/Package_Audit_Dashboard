@@ -1,0 +1,56 @@
+version: '3.8'
+
+services:
+  # Backend API
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: package-audit-backend
+    ports:
+      - "8000:8000"
+    environment:
+      - API_HOST=0.0.0.0
+      - API_PORT=8000
+      - DATA_DIR=/data/.package-audit
+      - LOG_LEVEL=INFO
+    volumes:
+      - backend_data:/data/.package-audit
+      - ./backend/app:/app/app:ro  # Read-only for security
+    networks:
+      - package-audit-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # Frontend
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: package-audit-frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    networks:
+      - package-audit-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:80/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+
+networks:
+  package-audit-network:
+    driver: bridge
+
+volumes:
+  backend_data:
+    driver: local

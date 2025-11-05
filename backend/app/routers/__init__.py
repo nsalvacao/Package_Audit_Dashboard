@@ -1,5 +1,5 @@
 """Routers FastAPI."""
 
-from . import discover, managers, packages
+from . import discover, health, managers, packages
 
 __all__ = ["discover", "managers", "packages"]
