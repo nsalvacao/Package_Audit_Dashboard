@@ -111,7 +111,7 @@ jobs:
 
       - name: Start services
         run: |
-          docker-compose up -d
+          docker compose up -d
           sleep 60  # Wait for services to be ready
 
       - name: Check backend health
@@ -129,9 +129,9 @@ jobs:
       - name: View logs
         if: failure()
         run: |
-          docker-compose logs backend
-          docker-compose logs frontend
+          docker compose logs backend
+          docker compose logs frontend
 
       - name: Stop services
         if: always()
-        run: docker-compose down
+        run: docker compose down
