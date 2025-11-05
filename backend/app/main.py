@@ -4,14 +4,14 @@ from __future__ import annotations
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.routers import discover, managers, packages
+from app.routers import advanced, discover, managers, packages, streaming
 
 
 def create_app() -> FastAPI:
     app = FastAPI(
         title="Package Audit Dashboard API",
-        version="0.1.0",
-        description="API para descoberta e gestão de gestores de pacotes.",
+        version="0.2.0",
+        description="API para descoberta e gestão de gestores de pacotes com funcionalidades avançadas.",
     )
 
     app.add_middleware(
@@ -25,6 +25,8 @@ def create_app() -> FastAPI:
     app.include_router(discover.router)
     app.include_router(managers.router)
     app.include_router(packages.router)
+    app.include_router(streaming.router)
+    app.include_router(advanced.router)
     return app
 
 

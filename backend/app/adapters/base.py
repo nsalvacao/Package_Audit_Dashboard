@@ -71,6 +71,43 @@ class BaseAdapter(ABC):
     def export_manifest(self) -> Dict[str, Any]:
         """Exporta manifest/instantâneo no formato do gestor."""
 
+    def get_dependency_tree(self, package: Optional[str] = None) -> Dict[str, Any]:
+        """Obtém árvore de dependências de um pacote específico ou de todos.
+
+        Implementação padrão retorna estrutura vazia. Subclasses devem sobrescrever.
+        """
+        return {
+            "manager": self.manager_id,
+            "package": package,
+            "tree": {},
+            "supported": False,
+            "message": "Dependency tree not implemented for this manager",
+        }
+
+    def scan_vulnerabilities(self) -> Dict[str, Any]:
+        """Escaneia vulnerabilidades conhecidas nos pacotes instalados.
+
+        Implementação padrão retorna estrutura vazia. Subclasses devem sobrescrever.
+        """
+        return {
+            "manager": self.manager_id,
+            "vulnerabilities": [],
+            "supported": False,
+            "message": "Vulnerability scanning not implemented for this manager",
+        }
+
+    def export_lockfile(self) -> Dict[str, Any]:
+        """Exporta lockfile do gestor de pacotes.
+
+        Implementação padrão retorna estrutura vazia. Subclasses devem sobrescrever.
+        """
+        return {
+            "manager": self.manager_id,
+            "lockfile": {},
+            "supported": False,
+            "message": "Lockfile export not implemented for this manager",
+        }
+
     # --- Utilitários de comandos -------------------------------------------------------
 
     def build_command(self, *args: str) -> List[str]:

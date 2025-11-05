@@ -95,3 +95,112 @@ class NpmAdapter(BaseAdapter):
             "generated_at": datetime.now(timezone.utc).isoformat(),
             "packages": packages,
         }
+
+    def get_dependency_tree(self, package: Optional[str] = None) -> Dict[str, Any]:
+        """Obtém árvore de dependências usando npm list."""
+        try:
+            args = ["list", "-g", "--json"]
+            if package:
+                sanitized = self._sanitize_package(package)
+                args.append(sanitized)
+
+            result = self.command_executor.run(
+                [self.executable_name, *args],
+                timeout=self.command_timeout,
+                check=False,
+            )
+
+            if result.returncode != 0:
+                return {
+                    "manager": self.manager_id,
+                    "package": package,
+                    "tree": {},
+                    "supported": True,
+                    "error": result.stderr,
+                }
+
+            data = json.loads(result.stdout)
+            return {
+                "manager": self.manager_id,
+                "package": package,
+                "tree": data.get("dependencies", {}),
+                "supported": True,
+            }
+        except (CommandExecutionError, json.JSONDecodeError) as exc:
+            logger.error("Failed to get dependency tree: %s", exc)
+            return {
+                "manager": self.manager_id,
+                "package": package,
+                "tree": {},
+                "supported": True,
+                "error": str(exc),
+            }
+
+    def scan_vulnerabilities(self) -> Dict[str, Any]:
+        """Escaneia vulnerabilidades usando npm audit."""
+        try:
+            result = self.command_executor.run(
+                [self.executable_name, "audit", "--json"],
+                timeout=self.command_timeout,
+                check=False,
+            )
+
+            if result.stdout:
+                data = json.loads(result.stdout)
+                vulnerabilities = []
+
+                # npm audit retorna formato específico
+                for vuln_id, vuln_data in data.get("vulnerabilities", {}).items():
+                    vulnerabilities.append({
+                        "id": vuln_id,
+                        "severity": vuln_data.get("severity"),
+                        "title": vuln_data.get("title"),
+                        "package": vuln_data.get("name"),
+                        "version": vuln_data.get("range"),
+                        "via": vuln_data.get("via", []),
+                    })
+
+                return {
+                    "manager": self.manager_id,
+                    "vulnerabilities": vulnerabilities,
+                    "supported": True,
+                    "metadata": data.get("metadata", {}),
+                }
+
+        except (CommandExecutionError, json.JSONDecodeError) as exc:
+            logger.error("Failed to scan vulnerabilities: %s", exc)
+            return {
+                "manager": self.manager_id,
+                "vulnerabilities": [],
+                "supported": True,
+                "error": str(exc),
+            }
+
+    def export_lockfile(self) -> Dict[str, Any]:
+        """Exporta package-lock.json global."""
+        try:
+            # npm list --json já fornece informação similar ao lockfile
+            result = self.command_executor.run(
+                [self.executable_name, "list", "-g", "--json"],
+                timeout=self.command_timeout,
+                check=False,
+            )
+
+            if result.returncode == 0 and result.stdout:
+                data = json.loads(result.stdout)
+                return {
+                    "manager": self.manager_id,
+                    "lockfile": data,
+                    "supported": True,
+                    "format": "npm-list-json",
+                }
+
+        except (CommandExecutionError, json.JSONDecodeError) as exc:
+            logger.error("Failed to export lockfile: %s", exc)
+
+        return {
+            "manager": self.manager_id,
+            "lockfile": {},
+            "supported": True,
+            "error": "Failed to export lockfile",
+        }
