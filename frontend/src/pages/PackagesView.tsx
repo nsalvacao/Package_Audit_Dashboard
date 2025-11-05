@@ -26,7 +26,7 @@ export function PackagesView() {
 
   const uninstallMutation = useMutation({
     mutationFn: async (packageName: string) => {
-      await axios.delete(`/api/managers/${selectedManager}/packages/${packageName}`)
+      await axios.delete(`/api/managers/${selectedManager}/packages/${encodeURIComponent(packageName)}`)
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['packages', selectedManager] })

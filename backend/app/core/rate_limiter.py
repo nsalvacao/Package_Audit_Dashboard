@@ -152,8 +152,9 @@ class RateLimiter:
         return "unknown"
 
 
-# Global rate limiter instance
+# Global rate limiter instances
 _rate_limiter: RateLimiter | None = None
+_path_rate_limiter: PathRateLimiter | None = None
 
 
 def get_rate_limiter() -> RateLimiter:
@@ -172,6 +173,19 @@ def get_rate_limiter() -> RateLimiter:
     return _rate_limiter
 
 
+def get_path_rate_limiter() -> PathRateLimiter:
+    """
+    Get or create path-specific rate limiter instance.
+
+    Returns:
+        PathRateLimiter instance
+    """
+    global _path_rate_limiter
+    if _path_rate_limiter is None:
+        _path_rate_limiter = PathRateLimiter()
+    return _path_rate_limiter
+
+
 async def rate_limit_middleware(request: Request, call_next: Callable) -> Response:
     """
     Middleware to enforce rate limiting on all requests.
@@ -186,11 +200,16 @@ async def rate_limit_middleware(request: Request, call_next: Callable) -> Respon
     Raises:
         HTTPException: 429 if rate limit exceeded
     """
-    limiter = get_rate_limiter()
-
     # Skip rate limiting for health checks
     if request.url.path.startswith("/health"):
         return await call_next(request)
+
+    # Check for path-specific rate limiter first
+    path_limiter_manager = get_path_rate_limiter()
+    path_specific_limiter = path_limiter_manager.get_limiter_for_path(request.url.path)
+
+    # Use path-specific limiter if available, otherwise use global limiter
+    limiter = path_specific_limiter if path_specific_limiter else get_rate_limiter()
 
     # Get client IP
     client_ip = limiter.get_client_ip(request)
