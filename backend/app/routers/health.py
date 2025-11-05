@@ -5,6 +5,7 @@ import platform
 import sys
 from datetime import datetime
 from pathlib import Path
+from typing import Optional
 
 from fastapi import APIRouter
 from pydantic import BaseModel
@@ -20,7 +21,7 @@ class HealthStatus(BaseModel):
     version: str
     python_version: str
     platform: str
-    uptime_seconds: float | None = None
+    uptime_seconds: Optional[float] = None
 
 
 class DetailedHealthStatus(HealthStatus):

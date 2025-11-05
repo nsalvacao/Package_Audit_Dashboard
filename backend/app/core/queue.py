@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 from enum import Enum
-from typing import Any, Callable, Coroutine
+from typing import Any, Callable, Coroutine, Optional
 
 from app.core.locking import (
     LockManager,
@@ -19,7 +19,7 @@ class OperationType(Enum):
 class OperationQueue:
     """Executa operações respeitando a distinção read/mutation."""
 
-    def __init__(self, lock_manager: LockManager | None = None) -> None:
+    def __init__(self, lock_manager: Optional[LockManager] = None) -> None:
         self.lock_manager = lock_manager or get_lock_manager()
 
     async def execute(
@@ -46,7 +46,7 @@ class OperationQueue:
             self.lock_manager.release_lock()
 
 
-_queue: OperationQueue | None = None
+_queue: Optional[OperationQueue] = None
 
 
 def get_operation_queue() -> OperationQueue:

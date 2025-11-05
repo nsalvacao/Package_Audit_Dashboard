@@ -11,7 +11,6 @@ interface Package {
 export function PackagesView() {
   const { selectedManager, confirmBeforeUninstall } = useAppStore()
   const [searchTerm, setSearchTerm] = useState('')
-  const [selectedPackages, setSelectedPackages] = useState<string[]>([])
   const queryClient = useQueryClient()
 
   const { data: packages, isLoading } = useQuery({

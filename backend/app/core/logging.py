@@ -6,7 +6,7 @@ import logging
 import sys
 from datetime import datetime
 from pathlib import Path
-from typing import Any
+from typing import Any, Optional
 
 # ANSI color codes
 RESET = "\033[0m"
@@ -172,7 +172,7 @@ class StructuredLogger:
 def setup_logging(
     log_level: str = "INFO",
     json_format: bool = False,
-    log_file: str | None = None,
+    log_file: Optional[str] = None,
     use_colors: bool = True,
 ) -> None:
     """
@@ -239,7 +239,7 @@ def log_request(
     path: str,
     status_code: int,
     duration_ms: float,
-    user_id: str | None = None,
+    user_id: Optional[str] = None,
 ) -> None:
     """
     Log HTTP request with structured data.
@@ -266,9 +266,9 @@ def log_request(
 def log_operation(
     operation: str,
     manager_id: str,
-    package_name: str | None = None,
+    package_name: Optional[str] = None,
     success: bool = True,
-    duration_ms: float | None = None,
+    duration_ms: Optional[float] = None,
     **kwargs: Any,
 ) -> None:
     """
