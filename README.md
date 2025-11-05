@@ -37,7 +37,7 @@ MVP para auditar e gerir pacotes de diferentes gestores (npm, pip, winget/brew) 
 
 ```bash
 # Clone o repositório
-git clone https://github.com/your-username/Package_Audit_Dashboard.git
+git clone https://github.com/nsalvacao/Package_Audit_Dashboard.git
 cd Package_Audit_Dashboard
 
 # Execute o script de setup
@@ -391,8 +391,8 @@ pytest tests/test_validation.py tests/test_locking.py -v
 
 ## 📧 Contact
 
-- **Issues**: https://github.com/your-username/Package_Audit_Dashboard/issues
-- **Discussions**: https://github.com/your-username/Package_Audit_Dashboard/discussions
+- **Issues**: https://github.com/nsalvacao/Package_Audit_Dashboard/issues
+- **Discussions**: https://github.com/nsalvacao/Package_Audit_Dashboard/discussions
 
 ---
 
