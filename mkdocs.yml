@@ -1,0 +1,128 @@
+site_name: Package Audit Dashboard
+site_description: Centralized package manager auditing and management with advanced security features
+site_author: nsalvacao
+site_url: https://nsalvacao.github.io/Package_Audit_Dashboard/
+
+repo_name: nsalvacao/Package_Audit_Dashboard
+repo_url: https://github.com/nsalvacao/Package_Audit_Dashboard
+edit_uri: edit/main/docs/
+
+theme:
+  name: material
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  features:
+    - navigation.instant
+    - navigation.tracking
+    - navigation.sections
+    - navigation.expand
+    - navigation.top
+    - search.suggest
+    - search.highlight
+    - content.code.annotate
+    - content.code.copy
+  icon:
+    repo: fontawesome/brands/github
+
+markdown_extensions:
+  - abbr
+  - admonition
+  - attr_list
+  - def_list
+  - footnotes
+  - meta
+  - md_in_html
+  - toc:
+      permalink: true
+  - pymdownx.arithmatex:
+      generic: true
+  - pymdownx.betterem:
+      smart_enable: all
+  - pymdownx.caret
+  - pymdownx.details
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.keys
+  - pymdownx.magiclink
+  - pymdownx.mark
+  - pymdownx.smartsymbols
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - pymdownx.tilde
+
+plugins:
+  - search
+  - git-revision-date-localized:
+      enable_creation_date: true
+
+nav:
+  - Home: index.md
+  - Getting Started:
+      - Quick Start: getting-started/quick-start.md
+      - Installation: getting-started/installation.md
+      - Configuration: getting-started/configuration.md
+      - First Steps: getting-started/first-steps.md
+  - User Guide:
+      - Dashboard: user-guide/dashboard.md
+      - CLI Usage: user-guide/cli.md
+      - Common Workflows: user-guide/workflows.md
+      - Optional Dependencies: OPTIONAL_DEPENDENCIES.md
+  - Features:
+      - Auto-Discovery: features/auto-discovery.md
+      - Package Management: features/package-management.md
+      - Security Scanning: features/security.md
+      - Dependency Trees: features/dependencies.md
+      - Real-time Streaming: features/streaming.md
+      - Batch Operations: features/batch-operations.md
+  - API Reference:
+      - Overview: api/overview.md
+      - Endpoints: API.md
+      - Authentication: api/authentication.md
+      - Rate Limiting: api/rate-limiting.md
+  - Deployment:
+      - Docker: DOCKER.md
+      - Environment Setup: ENV_SETUP.md
+      - Production: deployment/production.md
+  - Development:
+      - Contributing: ../CONTRIBUTING.md
+      - Architecture: development/architecture.md
+      - Security: SECURITY.md
+      - Testing: development/testing.md
+  - Reference:
+      - Roadmap: reference/roadmap.md
+      - Changelog: ../CHANGELOG_PHASE2.md
+      - Limitations: LIMITATIONS.md
+      - FAQ: reference/faq.md
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/nsalvacao/Package_Audit_Dashboard
+  version:
+    provider: mike
