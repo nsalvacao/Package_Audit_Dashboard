@@ -2,6 +2,14 @@ import { useQuery } from '@tanstack/react-query'
 import axios from 'axios'
 import { useAppStore } from '../store/appStore'
 
+interface Vulnerability {
+  package: string
+  title?: string
+  severity?: string
+  version?: string
+  id?: string
+}
+
 export function SecurityView() {
   const { selectedManager } = useAppStore()
 
@@ -27,7 +35,7 @@ export function SecurityView() {
           <div>Scanning...</div>
         ) : data?.vulnerabilities?.length > 0 ? (
           <div className="space-y-2">
-            {data.vulnerabilities.map((vuln: any, i: number) => (
+            {data.vulnerabilities.map((vuln: Vulnerability, i: number) => (
               <div key={i} className="p-3 border rounded bg-red-50">
                 <div className="font-medium">{vuln.package}</div>
                 <div className="text-sm text-gray-600">{vuln.title}</div>

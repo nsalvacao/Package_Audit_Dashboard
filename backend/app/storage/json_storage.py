@@ -6,7 +6,7 @@ import logging
 import os
 import tempfile
 from pathlib import Path
-from typing import Any
+from typing import Any, Optional
 
 from app.core.validation import PathTraversalError, ValidationLayer
 
@@ -19,7 +19,7 @@ class JSONStorage:
 
     DEFAULT_SUBDIR = "storage"
 
-    def __init__(self, base_dir: Path | None = None) -> None:
+    def __init__(self, base_dir: Optional[Path] = None) -> None:
         allowed_base = ValidationLayer.ALLOWED_BASE_DIR
         self.base_dir = base_dir or allowed_base / self.DEFAULT_SUBDIR
         self.base_dir.mkdir(parents=True, exist_ok=True)

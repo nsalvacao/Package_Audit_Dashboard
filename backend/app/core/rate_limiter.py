@@ -4,7 +4,7 @@ from __future__ import annotations
 import time
 from collections import defaultdict
 from threading import Lock
-from typing import Callable
+from typing import Callable, Optional
 
 from fastapi import HTTPException, Request, Response, status
 
@@ -153,8 +153,8 @@ class RateLimiter:
 
 
 # Global rate limiter instances
-_rate_limiter: RateLimiter | None = None
-_path_rate_limiter: PathRateLimiter | None = None
+_rate_limiter: Optional[RateLimiter] = None
+_path_rate_limiter: Optional[PathRateLimiter] = None
 
 
 def get_rate_limiter() -> RateLimiter:
@@ -272,7 +272,7 @@ class PathRateLimiter:
         }
         self._limiters: dict[str, RateLimiter] = {}
 
-    def get_limiter_for_path(self, path: str) -> RateLimiter | None:
+    def get_limiter_for_path(self, path: str) -> Optional[RateLimiter]:
         """
         Get rate limiter for specific path pattern.
 
