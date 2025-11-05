@@ -11,6 +11,7 @@ MVP para auditar e gerir pacotes de diferentes gestores (npm, pip, winget/brew) 
 
 ## ✨ Features
 
+### Phase 1 (MVP) - Completed
 - 🔍 **Auto-discovery** de gestores de pacotes instalados (npm, pip, winget, brew)
 - 🗑️ **Uninstall seguro** com snapshots automáticos antes da remoção
 - 🔒 **Camada de segurança** robusta (ValidationLayer, LockManager, OperationQueue)
@@ -19,6 +20,14 @@ MVP para auditar e gerir pacotes de diferentes gestores (npm, pip, winget/brew) 
 - 🌐 **Dashboard web** com React + TypeScript + TailwindCSS
 - 📊 **Gestão de snapshots** para backup e restauro
 - 🛡️ **Prevenção de command injection** e race conditions
+
+### Phase 2 (NEW!) - Just Released
+- 📡 **Real-time log streaming** com Server-Sent Events (SSE)
+- 🌳 **Dependency tree visualization** para análise de dependências
+- 🔐 **Vulnerability scanning** integrado (npm audit, pip-audit)
+- 📦 **Batch operations** para desinstalar múltiplos pacotes
+- ⏮️ **Automatic rollback** para reverter alterações
+- 📄 **Lock file export** (requirements.txt, package-lock.json)
 
 ---
 
@@ -179,6 +188,7 @@ python -m cli.audit_cli --help
 
 ### API REST
 
+#### Basic Operations
 ```bash
 # Descobrir gestores
 curl -X POST http://localhost:8000/api/discover
@@ -188,6 +198,32 @@ curl http://localhost:8000/api/managers
 
 # Desinstalar pacote
 curl -X DELETE "http://localhost:8000/api/managers/npm/packages/lodash"
+```
+
+#### Phase 2 Advanced Features
+```bash
+# Scan vulnerabilities
+curl http://localhost:8000/api/advanced/npm/vulnerabilities
+curl http://localhost:8000/api/advanced/pip/vulnerabilities
+
+# Get dependency tree
+curl http://localhost:8000/api/advanced/npm/dependency-tree
+curl http://localhost:8000/api/advanced/npm/dependency-tree/express
+
+# Export lockfile
+curl http://localhost:8000/api/advanced/npm/lockfile
+curl http://localhost:8000/api/advanced/pip/lockfile
+
+# Batch uninstall
+curl -X POST http://localhost:8000/api/advanced/npm/batch-uninstall \
+  -H "Content-Type: application/json" \
+  -d '{"packages": ["lodash", "express"], "force": false}'
+
+# Rollback to snapshot
+curl -X POST http://localhost:8000/api/advanced/npm/rollback/snapshot-id-here
+
+# Real-time streaming uninstall (SSE)
+curl -N http://localhost:8000/api/streaming/npm/packages/lodash/uninstall
 ```
 
 Ver documentação completa da API em: http://localhost:8000/docs
@@ -269,13 +305,13 @@ Ver documentação completa em: [docs/SECURITY.md](docs/SECURITY.md)
 - [x] CLI básico
 - [x] Frontend básico
 
-### 🚧 Phase 2 (Planned - Q2 2025)
-- [ ] Real-time log streaming (SSE)
-- [ ] Dependency tree visualization
-- [ ] Vulnerability scanning integration
-- [ ] Batch operations
-- [ ] Automatic rollback on failure
-- [ ] Lock file export
+### ✅ Phase 2 - COMPLETED
+- [x] Real-time log streaming (SSE)
+- [x] Dependency tree visualization
+- [x] Vulnerability scanning integration
+- [x] Batch operations
+- [x] Automatic rollback on failure
+- [x] Lock file export
 
 ### 🔮 Phase 3 (Planned - Q3 2025)
 - [ ] Multi-user support
@@ -369,6 +405,31 @@ pytest tests/test_validation.py tests/test_locking.py -v
 
 ---
 
-**Status**: ✅ MVP Phase 1 Complete | 🚧 Phase 2 In Planning
+**Status**: ✅ Phase 1 & Phase 2 Complete | 🔮 Phase 3 In Planning
 
 **Last Updated**: 2025-11-05
+
+## 🆕 What's New in Phase 2
+
+### Real-time Streaming
+Monitor package operations in real-time with Server-Sent Events:
+```javascript
+const eventSource = new EventSource('/api/streaming/npm/packages/lodash/uninstall');
+eventSource.onmessage = (event) => console.log(event.data);
+```
+
+### Vulnerability Scanning
+Automatically scan for known vulnerabilities:
+- **npm**: Uses built-in `npm audit`
+- **pip**: Integrates with `pip-audit` (install with: `pip install pip-audit`)
+
+### Dependency Trees
+Visualize package dependencies:
+- **npm**: Native `npm list --json` support
+- **pip**: Enhanced with `pipdeptree` (install with: `pip install pipdeptree`)
+
+### Batch Operations
+Efficiently manage multiple packages at once with automatic snapshot creation before batch operations.
+
+### Rollback Functionality
+Restore system state to any previous snapshot, automatically removing packages that weren't present in the snapshot state.

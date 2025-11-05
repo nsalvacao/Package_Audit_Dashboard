@@ -1,4 +1,6 @@
 import { useState } from 'react'
+import VulnerabilityScan from './VulnerabilityScan'
+import LockfileExport from './LockfileExport'
 
 interface Manager {
   id: string
@@ -38,41 +40,45 @@ function ManagerCard({ manager }: ManagerCardProps) {
         </span>
       </div>
 
-      <div className="mt-4 space-y-2">
+      <div className="mt-4 space-y-3">
         <button
           onClick={() => setIsExpanded(!isExpanded)}
           className="w-full text-left px-4 py-2 bg-blue-50 text-blue-700 rounded-md hover:bg-blue-100 transition-colors text-sm font-medium"
         >
-          {isExpanded ? '▼' : '▶'} View Packages
+          {isExpanded ? '▼' : '▶'} Advanced Features
         </button>
 
         {isExpanded && (
-          <div className="mt-3 p-4 bg-gray-50 rounded-md">
-            <p className="text-sm text-gray-600 italic">
-              Package list functionality will be implemented in Phase 2
-            </p>
-            <p className="text-xs text-gray-500 mt-2">
-              Endpoint: GET /api/managers/{manager.id}/packages
-            </p>
+          <div className="space-y-3">
+            {/* Vulnerability Scanning */}
+            <VulnerabilityScan managerId={manager.id} />
+
+            {/* Lockfile Export */}
+            <div className="border border-gray-200 rounded-lg p-4 bg-white">
+              <h4 className="text-sm font-medium text-gray-900 mb-3">Export Lockfile</h4>
+              <LockfileExport managerId={manager.id} />
+            </div>
+
+            {/* Dependency Tree Link */}
+            <div className="border border-gray-200 rounded-lg p-4 bg-white">
+              <h4 className="text-sm font-medium text-gray-900 mb-2">Dependency Tree</h4>
+              <p className="text-xs text-gray-600 mb-3">
+                View dependency tree for all packages
+              </p>
+              <a
+                href={`/api/advanced/${manager.id}/dependency-tree`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded transition-colors text-sm"
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                </svg>
+                View Tree
+              </a>
+            </div>
           </div>
         )}
-      </div>
-
-      <div className="mt-4 pt-4 border-t border-gray-100 flex space-x-2">
-        <button
-          className="flex-1 px-3 py-1.5 text-sm bg-gray-100 text-gray-700 rounded hover:bg-gray-200 transition-colors"
-          disabled
-          title="Coming soon"
-        >
-          Export
-        </button>
-        <button
-          className="flex-1 px-3 py-1.5 text-sm bg-gray-100 text-gray-700 rounded hover:bg-gray-200 transition-colors"
-          disabled
-          title="Coming soon"
-        >
-          Snapshot
-        </button>
       </div>
     </div>
   )

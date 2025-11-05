@@ -4,7 +4,7 @@ from __future__ import annotations
 import json
 import logging
 from datetime import datetime, timezone
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Optional
 
 from app.adapters.base import BaseAdapter
 from app.core.executor import CommandExecutionError
@@ -90,4 +90,134 @@ class PipAdapter(BaseAdapter):
             "manager": self.manager_id,
             "generated_at": datetime.now(timezone.utc).isoformat(),
             "packages": packages,
+        }
+
+    def get_dependency_tree(self, package: Optional[str] = None) -> Dict[str, Any]:
+        """Obtém árvore de dependências usando pipdeptree."""
+        try:
+            # Tenta usar pipdeptree se disponível
+            import shutil
+            if shutil.which("pipdeptree"):
+                args = ["--json"]
+                if package:
+                    sanitized = self._sanitize_package(package)
+                    args.extend(["-p", sanitized])
+
+                result = self.command_executor.run(
+                    ["pipdeptree", *args],
+                    timeout=self.command_timeout,
+                    check=False,
+                )
+
+                if result.returncode == 0 and result.stdout:
+                    data = json.loads(result.stdout)
+                    return {
+                        "manager": self.manager_id,
+                        "package": package,
+                        "tree": data,
+                        "supported": True,
+                    }
+
+            # Fallback: pip show
+            if package:
+                sanitized = self._sanitize_package(package)
+                result = self.command_executor.run(
+                    [self.executable_name, "show", sanitized],
+                    timeout=self.command_timeout,
+                    check=False,
+                )
+
+                if result.returncode == 0:
+                    return {
+                        "manager": self.manager_id,
+                        "package": package,
+                        "tree": {"info": result.stdout},
+                        "supported": True,
+                        "note": "Limited info - install pipdeptree for full tree",
+                    }
+
+        except (CommandExecutionError, json.JSONDecodeError) as exc:
+            logger.error("Failed to get dependency tree: %s", exc)
+
+        return {
+            "manager": self.manager_id,
+            "package": package,
+            "tree": {},
+            "supported": True,
+            "error": "Install pipdeptree for dependency tree support",
+        }
+
+    def scan_vulnerabilities(self) -> Dict[str, Any]:
+        """Escaneia vulnerabilidades usando pip-audit."""
+        try:
+            # Verifica se pip-audit está disponível
+            import shutil
+            if not shutil.which("pip-audit"):
+                return {
+                    "manager": self.manager_id,
+                    "vulnerabilities": [],
+                    "supported": True,
+                    "error": "pip-audit not installed. Run: pip install pip-audit",
+                }
+
+            result = self.command_executor.run(
+                ["pip-audit", "--format=json"],
+                timeout=60,  # Scanning pode demorar
+                check=False,
+            )
+
+            if result.stdout:
+                data = json.loads(result.stdout)
+                vulnerabilities = []
+
+                for vuln in data.get("dependencies", []):
+                    for advisory in vuln.get("vulns", []):
+                        vulnerabilities.append({
+                            "id": advisory.get("id"),
+                            "severity": advisory.get("fix_versions"),
+                            "description": advisory.get("description"),
+                            "package": vuln.get("name"),
+                            "version": vuln.get("version"),
+                        })
+
+                return {
+                    "manager": self.manager_id,
+                    "vulnerabilities": vulnerabilities,
+                    "supported": True,
+                }
+
+        except (CommandExecutionError, json.JSONDecodeError) as exc:
+            logger.error("Failed to scan vulnerabilities: %s", exc)
+            return {
+                "manager": self.manager_id,
+                "vulnerabilities": [],
+                "supported": True,
+                "error": str(exc),
+            }
+
+    def export_lockfile(self) -> Dict[str, Any]:
+        """Exporta requirements.txt."""
+        try:
+            result = self.command_executor.run(
+                [self.executable_name, "freeze"],
+                timeout=self.command_timeout,
+                check=False,
+            )
+
+            if result.returncode == 0 and result.stdout:
+                return {
+                    "manager": self.manager_id,
+                    "lockfile": result.stdout,
+                    "supported": True,
+                    "format": "requirements.txt",
+                }
+
+        except CommandExecutionError as exc:
+            logger.error("Failed to export lockfile: %s", exc)
+
+        return {
+            "manager": self.manager_id,
+            "lockfile": {},
+            "supported": True,
+            "error": "Failed to export requirements",
         }
