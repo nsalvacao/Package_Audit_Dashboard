@@ -1,9 +1,15 @@
 # 📦 Package Audit Dashboard
 
+[![Tests](https://github.com/nsalvacao/Package_Audit_Dashboard/actions/workflows/test.yml/badge.svg)](https://github.com/nsalvacao/Package_Audit_Dashboard/actions/workflows/test.yml)
+[![Docker Build](https://github.com/nsalvacao/Package_Audit_Dashboard/actions/workflows/docker.yml/badge.svg)](https://github.com/nsalvacao/Package_Audit_Dashboard/actions/workflows/docker.yml)
+[![codecov](https://codecov.io/gh/nsalvacao/Package_Audit_Dashboard/branch/main/graph/badge.svg)](https://codecov.io/gh/nsalvacao/Package_Audit_Dashboard)
 [![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.109-green.svg)](https://fastapi.tiangolo.com/)
 [![React 18](https://img.shields.io/badge/React-18-blue.svg)](https://reactjs.org/)
+[![Node 18+](https://img.shields.io/badge/node-18+-brightgreen.svg)](https://nodejs.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
 MVP para auditar e gerir pacotes de diferentes gestores (npm, pip, winget/brew) com foco em segurança operacional.
 
@@ -230,6 +236,201 @@ Ver documentação completa da API em: http://localhost:8000/docs
 
 ---
 
+## 💡 Common Workflows
+
+### Workflow 1: Complete Security Audit
+
+Perform a comprehensive security audit of your project:
+
+```bash
+# 1. Start backend and frontend
+cd backend && uvicorn app.main:app --reload &
+cd frontend && npm run dev &
+
+# 2. Discover package managers
+curl -X POST http://localhost:8000/api/discover
+
+# 3. Scan for vulnerabilities (npm)
+curl http://localhost:8000/api/advanced/npm/vulnerabilities
+
+# 4. Scan for vulnerabilities (pip)
+curl http://localhost:8000/api/advanced/pip/vulnerabilities
+
+# 5. Export lockfiles for backup
+curl http://localhost:8000/api/advanced/npm/lockfile -o npm-list.json
+curl http://localhost:8000/api/advanced/pip/lockfile -o requirements.txt
+
+# 6. View dependency trees
+curl http://localhost:8000/api/advanced/npm/dependency-tree
+```
+
+### Workflow 2: Safe Package Cleanup
+
+Remove multiple packages safely with automatic rollback:
+
+```bash
+# 1. Create snapshot before cleanup
+curl -X POST http://localhost:8000/api/discover
+
+# 2. Review packages to remove
+curl http://localhost:8000/api/managers/npm/packages
+
+# 3. Batch uninstall with automatic snapshot
+curl -X POST http://localhost:8000/api/advanced/npm/batch-uninstall \
+  -H "Content-Type: application/json" \
+  -d '{
+    "packages": ["unused-package-1", "unused-package-2", "old-dep"],
+    "force": false
+  }'
+
+# 4. If something goes wrong, rollback to previous state
+# Get snapshot ID from response
+curl -X POST http://localhost:8000/api/advanced/npm/rollback/SNAPSHOT_ID
+```
+
+### Workflow 3: Monitor Package Changes
+
+Use the dashboard to monitor changes over time:
+
+1. **Initial Snapshot**: Export lockfile as baseline
+   ```bash
+   curl http://localhost:8000/api/advanced/npm/lockfile -o baseline-npm.json
+   curl http://localhost:8000/api/advanced/pip/lockfile -o baseline-pip.txt
+   ```
+
+2. **After Changes**: Compare current state
+   ```bash
+   curl http://localhost:8000/api/advanced/npm/lockfile -o current-npm.json
+   diff baseline-npm.json current-npm.json
+   ```
+
+3. **Review Vulnerabilities**: Check for new security issues
+   ```bash
+   curl http://localhost:8000/api/advanced/npm/vulnerabilities | jq '.vulnerabilities[] | {package, severity}'
+   ```
+
+### Workflow 4: Development Environment Setup
+
+Set up a clean development environment:
+
+```bash
+# 1. Clone and setup using Docker
+git clone https://github.com/nsalvacao/Package_Audit_Dashboard.git
+cd Package_Audit_Dashboard
+docker-compose up -d
+
+# 2. Verify services are healthy
+curl http://localhost:8000/health/detailed
+
+# 3. Access the dashboard
+open http://localhost:5173
+
+# 4. Run security audit on your project
+# The dashboard will show all detected package managers
+# Click "Scan Vulnerabilities" on each manager card
+```
+
+### Workflow 5: CI/CD Integration
+
+Integrate security scanning in your CI/CD pipeline:
+
+```yaml
+# .github/workflows/security-audit.yml
+name: Security Audit
+
+on: [push, pull_request]
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    services:
+      package-audit:
+        image: ghcr.io/nsalvacao/package_audit_dashboard-backend:latest
+        ports:
+          - 8000:8000
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Scan npm vulnerabilities
+        run: |
+          response=$(curl -s http://localhost:8000/api/advanced/npm/vulnerabilities)
+          vulns=$(echo $response | jq '.vulnerabilities | length')
+
+          if [ "$vulns" -gt 0 ]; then
+            echo "::error::Found $vulns vulnerabilities"
+            echo $response | jq '.vulnerabilities'
+            exit 1
+          fi
+
+      - name: Scan pip vulnerabilities
+        run: |
+          response=$(curl -s http://localhost:8000/api/advanced/pip/vulnerabilities)
+          vulns=$(echo $response | jq '.vulnerabilities | length')
+
+          if [ "$vulns" -gt 0 ]; then
+            echo "::error::Found $vulns vulnerabilities"
+            exit 1
+          fi
+```
+
+### Workflow 6: Real-time Package Operation Monitoring
+
+Monitor package operations in real-time using SSE:
+
+```javascript
+// JavaScript example
+const eventSource = new EventSource(
+  'http://localhost:8000/api/streaming/npm/packages/lodash/uninstall'
+);
+
+eventSource.onmessage = (event) => {
+  const data = JSON.parse(event.data);
+  console.log(`Status: ${data.status}`);
+  console.log(`Output: ${data.output}`);
+
+  if (data.status === 'completed') {
+    console.log('✅ Uninstall successful');
+    eventSource.close();
+  } else if (data.status === 'failed') {
+    console.error('❌ Uninstall failed:', data.error);
+    eventSource.close();
+  }
+};
+```
+
+```bash
+# Or using curl
+curl -N http://localhost:8000/api/streaming/npm/packages/lodash/uninstall
+
+# Output:
+# data: {"status": "running", "output": "Removing lodash..."}
+# data: {"status": "running", "output": "npm uninstall lodash"}
+# data: {"status": "completed", "output": "removed 1 package"}
+```
+
+### Workflow 7: Dependency Tree Analysis
+
+Analyze and visualize package dependencies:
+
+```bash
+# 1. Get complete dependency tree
+curl http://localhost:8000/api/advanced/npm/dependency-tree | jq . > tree.json
+
+# 2. Analyze specific package
+curl http://localhost:8000/api/advanced/npm/dependency-tree/express | jq .
+
+# 3. Find packages with most dependencies
+curl http://localhost:8000/api/advanced/npm/dependency-tree | \
+  jq '[.packages[] | {name, deps: (.dependencies | length)}] | sort_by(.deps) | reverse | .[0:10]'
+
+# 4. Check for circular dependencies
+curl http://localhost:8000/api/advanced/npm/dependency-tree | \
+  jq '.packages[] | select(.dependencies | index(.name))'
+```
+
+---
+
 ## 🧪 Testing
 
 ```bash
@@ -292,6 +493,21 @@ Ver documentação completa em: [docs/SECURITY.md](docs/SECURITY.md)
 - **pip** (Python)
 - **winget** (Windows)
 - **brew** (macOS)
+
+### ⚡ Optional Dependencies (Phase 2 Features)
+
+For full Phase 2 functionality, install these optional tools:
+
+```bash
+# Python vulnerability scanning and dependency analysis
+pip install pip-audit pipdeptree
+```
+
+**What you get:**
+- ✅ **pip-audit**: Security vulnerability scanning for Python packages
+- ✅ **pipdeptree**: Enhanced dependency tree visualization for pip
+
+**Note:** npm features work out-of-the-box (built-in tools). See [OPTIONAL_DEPENDENCIES.md](docs/OPTIONAL_DEPENDENCIES.md) for details.
 
 ---
 

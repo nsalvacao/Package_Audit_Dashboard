@@ -81,8 +81,29 @@ function LockfileExport({ managerId }: LockfileExportProps) {
       </button>
 
       {error && (
-        <div className="bg-red-50 border border-red-200 rounded p-2 text-sm text-red-700">
-          {error}
+        <div className="bg-red-50 border border-red-200 rounded p-3 text-sm">
+          <div className="flex items-start gap-2">
+            <svg className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            </svg>
+            <div className="flex-1">
+              <p className="text-red-700 font-medium">Export failed</p>
+              <p className="text-red-600 mt-1">{error}</p>
+              {error.includes('not supported') && (
+                <p className="text-red-600 mt-2 text-xs">
+                  This feature may not be available for {managerId}.
+                  <a
+                    href="https://github.com/nsalvacao/Package_Audit_Dashboard/blob/main/docs/OPTIONAL_DEPENDENCIES.md"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-red-700 hover:text-red-800 underline ml-1"
+                  >
+                    Learn more →
+                  </a>
+                </p>
+              )}
+            </div>
+          </div>
         </div>
       )}
 
