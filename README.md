@@ -113,6 +113,75 @@ python -m cli.audit_cli --help
 
 ---
 
+## 📖 How to Use
+
+After installation, access the dashboard at **http://localhost:5173** (frontend) with the backend running at **http://localhost:8000**.
+
+### Basic Workflow
+
+1. **Select a Package Manager**
+   - The Overview tab auto-detects installed managers (npm, pip, brew, winget)
+   - Click on any manager card to select it
+   - Your selection persists across sessions
+
+2. **View Installed Packages**
+   - Navigate to the **Packages** tab
+   - Search and filter packages by name
+   - View package versions and details
+
+3. **Uninstall Packages**
+   - **Single uninstall**: Click "Uninstall" button next to any package
+   - **Batch uninstall**: Go to Operations tab, enter package names (one per line)
+   - All uninstalls automatically create snapshots for rollback
+
+4. **Security Audits**
+   - Go to the **Security** tab
+   - Click "Scan Vulnerabilities" to audit installed packages
+   - View results with severity levels (critical/high/medium/low)
+
+5. **Advanced Features**
+   - **Export lockfiles**: Download requirements.txt or package-lock.json
+   - **Dependency trees**: Visualize package dependencies
+   - **Rollback**: Restore previous states using snapshots
+
+### Common Use Cases
+
+```bash
+# Use Case 1: Clean up unused packages
+1. Select manager → Packages tab → Search package → Uninstall
+2. System creates snapshot → Package removed → Snapshot ID returned
+
+# Use Case 2: Security audit
+1. Select manager → Security tab → Scan Vulnerabilities
+2. Review critical/high severity issues → Plan remediation
+
+# Use Case 3: Batch cleanup
+1. Select manager → Operations tab → Enter package list
+2. Click "Batch Uninstall" → Review results
+
+# Use Case 4: Safe experimentation
+1. Install test packages → Try functionality
+2. Operations tab → Rollback → Select snapshot → Restore
+```
+
+### CLI Usage (Optional)
+
+```bash
+# Discover package managers
+python -m cli.audit_cli discover
+
+# List packages
+python -m cli.audit_cli list npm
+
+# Uninstall package
+python -m cli.audit_cli uninstall npm lodash
+
+# Security scan
+python -m cli.audit_cli scan npm
+```
+
+---
+
 ## 📁 Project Structure
 
 ```
