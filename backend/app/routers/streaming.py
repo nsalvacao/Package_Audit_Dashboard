@@ -67,7 +67,10 @@ async def event_generator(
             yield f"event: log\ndata: {json.dumps({'message': f'Uninstalling {clean_package_name}...'})}\n\n"
 
             result = await _run_in_thread(adapter.uninstall, clean_package_name, force)
-            return snapshot, result
+
+            # Yield the result as an event instead of returning it
+            yield f"event: result\ndata: {json.dumps({{'snapshot_id': snapshot.id if snapshot else None, 'success': result}})}\n\n"
+            return
 
         try:
             async for event in perform_uninstall():

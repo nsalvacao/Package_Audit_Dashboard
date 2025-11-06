@@ -36,7 +36,7 @@ export function SecurityView() {
         ) : data?.vulnerabilities?.length > 0 ? (
           <div className="space-y-2">
             {data.vulnerabilities.map((vuln: Vulnerability, i: number) => (
-              <div key={i} className="p-3 border rounded bg-red-50">
+              <div key={vuln.id || vuln.package + i} className="p-3 border rounded bg-red-50">
                 <div className="font-medium">{vuln.package}</div>
                 <div className="text-sm text-gray-600">{vuln.title}</div>
                 <div className="text-xs text-red-600">Severity: {vuln.severity}</div>

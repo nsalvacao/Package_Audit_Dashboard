@@ -105,6 +105,8 @@ jobs:
     permissions:
       contents: read
       security-events: write
+      actions: read
+      checks: write
 
     steps:
       - name: Checkout code
