@@ -1,47 +1,47 @@
-## 📋 Tabela de comandos úteis por gestor
+## 📋 Useful Commands by Package Manager
 
-|Gestor|Listar pacotes/versões|Instalar|Atualizar|Remover/Desinstalar|Outros úteis|
-|---|---|---|---|---|---|
-|**npm**|`npm list -g --depth=0`|`npm install -g <pkg>`|`npm update -g <pkg>` ou `npm update -g`|`npm uninstall -g <pkg>`|`npm outdated -g` (ver updates disponíveis)|
-|**pnpm**|`pnpm list -g --depth=0`|`pnpm add -g <pkg>`|`pnpm update -g <pkg>`|`pnpm remove -g <pkg>`|`pnpm outdated -g`|
-|**pip**|`pip list`|`pip install <pkg>`|`pip install --upgrade <pkg>`|`pip uninstall <pkg>`|`pip freeze > requirements.txt` (snapshot)|
-|**pipx**|`pipx list`|`pipx install <pkg>`|`pipx upgrade <pkg>` ou `pipx upgrade-all`|`pipx uninstall <pkg>`|`pipx reinstall-all` (útil após upgrade do Python)|
-|**winget**|`winget list`|`winget install <pkg>`|`winget upgrade <pkg>` ou `winget upgrade --all`|`winget uninstall <pkg>`|`winget search <nome>`|
-|**nvm (Windows/Linux)**|`nvm list`|`nvm install <versão>`|`nvm install <versão> --reinstall-packages-from=current`|`nvm uninstall <versão>`|`nvm use <versão>` (trocar runtime)|
-|**choco**|`choco list -l`|`choco install <pkg>`|`choco upgrade <pkg>` ou `choco upgrade all`|`choco uninstall <pkg>`|`choco outdated`|
-|**uv** (Python)|`uv pip list`|`uv pip install <pkg>`|`uv pip install --upgrade <pkg>`|`uv pip uninstall <pkg>`|`uv venv` (criar ambiente), `uv sync` (sincronizar deps)|
-
----
-
-## 📋 Tabela de comandos úteis para auditoria/manutenção
-
-|Gestor|Comando de ajuda|Auditoria / Diagnóstico|Outros comandos úteis de manutenção|
-|---|---|---|---|
-|**npm**|`npm help` ou `npm help <cmd>`|`npm audit` (verifica vulnerabilidades), `npm audit fix` (corrige) [npm Docs](https://docs.npmjs.com/cli/v10/commands/npm-audit/?v=true)|`npm outdated` (pacotes desatualizados), `npm doctor` (diagnóstico do ambiente)|
-|**pnpm**|`pnpm help` ou `pnpm <cmd> --help` [pnpm](https://pnpm.io/pt/pnpm-cli)|`pnpm audit` (auditoria de segurança), `pnpm outdated` (pacotes desatualizados)|`pnpm why <pkg>` (explica dependência), `pnpm store status` (estado do cache)|
-|**pip**|`pip help` ou `pip <cmd> --help` [pip](https://pip.pypa.io/en/stable/cli/index.html)|`pip check` (verifica dependências quebradas), `pip debug` (info do ambiente)|`pip show <pkg>` (detalhes de pacote), `pip cache info` (estado do cache)|
-|**pipx**|`pipx --help` ou `pipx <cmd> --help` [pipx.pypa.io](https://pipx.pypa.io/latest/docs/)|`pipx list` (inventário de apps), `pipx environment` (variáveis e paths)|`pipx run <pkg>` (executa sem instalar), `pipx inject <pkg> <dep>` (injeta dependências extras)|
-|**winget**|`winget --help` ou `winget <cmd> --help` [Microsoft Learn](https://learn.microsoft.com/pt-br/windows/package-manager/winget/)|`winget list` (apps instalados), `winget upgrade` (lista updates disponíveis)|`winget upgrade --all` (atualiza tudo), `winget search <nome>` (procurar apps)|
-|**nvm**|`nvm --help` [GitHub Gist](https://gist.github.com/chranderson/b0a02781c232f170db634b40c97ff455)|`nvm ls` (versões instaladas), `nvm ls-remote` (versões disponíveis online)|`nvm alias default <versão>` (define padrão), `nvm which <versão>` (path do binário)|
-|**choco**|`choco -?` ou `choco <cmd> -?` [Chocolatey Software](https://docs.chocolatey.org/en-us/choco/commands/)|`choco outdated` (pacotes desatualizados), `choco info <pkg>` (detalhes)|`choco pin list` (pacotes fixados), `choco config list` (config ativa), `choco feature list`|
-|**uv**|`uv --help` ou `uv <cmd> --help` [DataCamp](https://www.datacamp.com/pt/tutorial/python-uv)|`uv pip check` (verifica dependências), `uv pip list` (lista pacotes)|`uv venv` (cria ambientes), `uv sync` (sincroniza dependências), `uv lock` (gera lockfile reprodutível)|
+| Manager | List packages/versions | Install | Update | Remove/Uninstall | Other useful commands |
+|---------|------------------------|---------|--------|------------------|-----------------------|
+| **npm** | `npm list -g --depth=0` | `npm install -g <pkg>` | `npm update -g <pkg>` or `npm update -g` | `npm uninstall -g <pkg>` | `npm outdated -g` (check for updates) |
+| **pnpm** | `pnpm list -g --depth=0` | `pnpm add -g <pkg>` | `pnpm update -g <pkg>` | `pnpm remove -g <pkg>` | `pnpm outdated -g` |
+| **pip** | `pip list` | `pip install <pkg>` | `pip install --upgrade <pkg>` | `pip uninstall <pkg>` | `pip freeze > requirements.txt` (snapshot) |
+| **pipx** | `pipx list` | `pipx install <pkg>` | `pipx upgrade <pkg>` or `pipx upgrade-all` | `pipx uninstall <pkg>` | `pipx reinstall-all` (useful after upgrading Python) |
+| **winget** | `winget list` | `winget install <pkg>` | `winget upgrade <pkg>` or `winget upgrade --all` | `winget uninstall <pkg>` | `winget search <name>` |
+| **nvm (Windows/Linux)** | `nvm list` | `nvm install <version>` | `nvm install <version> --reinstall-packages-from=current` | `nvm uninstall <version>` | `nvm use <version>` (switch runtime) |
+| **choco** | `choco list -l` | `choco install <pkg>` | `choco upgrade <pkg>` or `choco upgrade all` | `choco uninstall <pkg>` | `choco outdated` |
+| **uv** (Python) | `uv pip list` | `uv pip install <pkg>` | `uv pip install --upgrade <pkg>` | `uv pip uninstall <pkg>` | `uv venv` (create environment), `uv sync` (sync dependencies) |
 
 ---
 
-## 🔑 Destaques
+## 📋 Audit and Maintenance Commands
 
-- **npm/pnpm**: têm comandos de **auditoria de segurança** integrados (`audit`).
-- **pip/pipx/uv**: oferecem comandos de **checagem de dependências** e **ambientes isolados**.
-- **winget/choco**: focam em **inventário e atualização de apps de sistema**.
-- **nvm**: não faz auditoria de pacotes, mas é essencial para **gestão de versões Node**.
+| Manager | Help command | Audit / Diagnostics | Other maintenance commands |
+|---------|--------------|---------------------|----------------------------|
+| **npm** | `npm help` or `npm help <cmd>` | `npm audit` (security scan), `npm audit fix` (autofix) — [npm Docs](https://docs.npmjs.com/cli/v10/commands/npm-audit/?v=true) | `npm outdated` (outdated packages), `npm doctor` (environment diagnostics) |
+| **pnpm** | `pnpm help` or `pnpm <cmd> --help` — [pnpm](https://pnpm.io/pnpm-cli) | `pnpm audit` (security), `pnpm outdated` (stale packages) | `pnpm why <pkg>` (dependency graph), `pnpm store status` (cache state) |
+| **pip** | `pip help` or `pip <cmd> --help` — [pip](https://pip.pypa.io/en/stable/cli/index.html) | `pip check` (broken dependencies), `pip debug` (environment info) | `pip show <pkg>` (package details), `pip cache info` (cache state) |
+| **pipx** | `pipx --help` or `pipx <cmd> --help` — [pipx.pypa.io](https://pipx.pypa.io/latest/docs/) | `pipx list` (inventory), `pipx environment` (variables and paths) | `pipx run <pkg>` (run without install), `pipx inject <pkg> <dep>` (inject extra dependencies) |
+| **winget** | `winget --help` or `winget <cmd> --help` — [Microsoft Learn](https://learn.microsoft.com/windows/package-manager/winget/) | `winget list` (installed apps), `winget upgrade` (available updates) | `winget upgrade --all` (upgrade everything), `winget search <name>` (find apps) |
+| **nvm** | `nvm --help` — [GitHub Gist](https://gist.github.com/chranderson/b0a02781c232f170db634b40c97ff455) | `nvm ls` (installed versions), `nvm ls-remote` (remote versions) | `nvm alias default <version>` (set default), `nvm which <version>` (binary path) |
+| **choco** | `choco -?` or `choco <cmd> -?` — [Chocolatey Software](https://docs.chocolatey.org/en-us/choco/commands/) | `choco outdated` (stale packages), `choco info <pkg>` (details) | `choco pin list` (pinned packages), `choco config list` (active config), `choco feature list` |
+| **uv** | `uv --help` or `uv <cmd> --help` — [DataCamp](https://www.datacamp.com/tutorial/python-uv) | `uv pip check` (dependency validation), `uv pip list` (package inventory) | `uv venv` (create environments), `uv sync` (sync dependencies), `uv lock` (generate reproducible lockfile) |
 
 ---
 
-## 🔑 Observações
+## 🔑 Highlights
 
-- **npm/pnpm** → `-g` é para pacotes globais; sem `-g` atua no projeto local.
-- **pip** → convém usar sempre em **venvs** (ou `uv`/`pipx`) para evitar poluição global.
-- **pipx** → ideal para CLIs Python isolados.
-- **winget/choco** → atuam a nível de sistema (apps Windows).
-- **nvm** → não gere pacotes, apenas versões do Node.js.
-- **uv** → substituto moderno do `pip`/`pip-tools`, muito mais rápido e declarativo.
+- **npm/pnpm:** include built-in **security audit** commands (`audit`).
+- **pip/pipx/uv:** provide **dependency checking** and **isolated environments**.
+- **winget/choco:** focus on **system-level inventory and updates**.
+- **nvm:** manages **Node.js runtime versions** rather than packages.
+
+---
+
+## 🔑 Notes
+
+- **npm/pnpm** — use `-g` for global packages; omit it for project-level operations.
+- **pip** — prefer virtual environments (or `uv`/`pipx`) to avoid polluting the global interpreter.
+- **pipx** — ideal for isolated Python CLIs.
+- **winget/choco** — operate at the Windows system level.
+- **nvm** — handles Node.js versions, not packages.
+- **uv** — modern replacement for `pip`/`pip-tools`, faster and declarative.

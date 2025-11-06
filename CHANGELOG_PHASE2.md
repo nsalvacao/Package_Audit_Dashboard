@@ -1,127 +1,127 @@
-# Changelog - Phase 2 Release
+# Changelog — Phase 2 Release
 
-## Version 0.2.0 - Phase 2 Complete (2025-11-05)
+## Version 0.2.0 — Phase 2 Complete (2025-11-05)
 
-### 🎉 Major Features Added
+### 🎉 Major Features
 
 #### 1. Real-time Log Streaming (SSE)
-- **New Router**: `/api/streaming`
-- **Endpoint**: `GET /api/streaming/{manager_id}/packages/{package_name}/uninstall`
-- Server-Sent Events (SSE) para monitoramento em tempo real de operações
-- Streaming de logs durante uninstall de pacotes
-- Headers otimizados para SSE (`Cache-Control`, `X-Accel-Buffering`)
+- **Router:** `/api/streaming`
+- **Endpoint:** `GET /api/streaming/{manager_id}/packages/{package_name}/uninstall`
+- Server-Sent Events (SSE) stream live updates for uninstall operations
+- Log streaming throughout the uninstall lifecycle
+- Optimized SSE headers (`Cache-Control`, `X-Accel-Buffering`)
 
 #### 2. Dependency Tree Visualization
-- **New Router**: `/api/advanced`
-- **Endpoints**:
-  - `GET /api/advanced/{manager_id}/dependency-tree` - Árvore completa
-  - `GET /api/advanced/{manager_id}/dependency-tree/{package_name}` - Pacote específico
-- **npm**: Usa `npm list --json` nativo
-- **pip**: Suporte para `pipdeptree` (opcional, com fallback para `pip show`)
+- **Router:** `/api/advanced`
+- **Endpoints:**
+  - `GET /api/advanced/{manager_id}/dependency-tree` — Full tree
+  - `GET /api/advanced/{manager_id}/dependency-tree/{package_name}` — Specific package
+- **npm:** Uses native `npm list --json`
+- **pip:** Supports `pipdeptree` (optional) with fallback to `pip show`
 
 #### 3. Vulnerability Scanning
-- **Endpoint**: `GET /api/advanced/{manager_id}/vulnerabilities`
-- **npm**: Integração com `npm audit --json`
-- **pip**: Integração com `pip-audit --format=json` (requer instalação)
-- Retorna lista de vulnerabilidades com severidade, descrição e pacotes afetados
+- **Endpoint:** `GET /api/advanced/{manager_id}/vulnerabilities`
+- **npm:** Integrates `npm audit --json`
+- **pip:** Integrates `pip-audit --format=json` (optional install)
+- Returns vulnerabilities with severity, description, and affected packages
 
 #### 4. Batch Operations
-- **Endpoint**: `POST /api/advanced/{manager_id}/batch-uninstall`
-- Desinstala múltiplos pacotes em uma única operação
-- Snapshot automático antes da operação batch
-- Retorna lista de sucessos e falhas
+- **Endpoint:** `POST /api/advanced/{manager_id}/batch-uninstall`
+- Uninstalls multiple packages in a single operation
+- Automatic snapshot created before the batch runs
+- Returns success/failure details per package
 - Request model: `BatchUninstallRequest`
 - Response model: `BatchUninstallResponse`
 
 #### 5. Automatic Rollback
-- **Endpoint**: `POST /api/advanced/{manager_id}/rollback/{snapshot_id}`
-- Restaura sistema para estado de snapshot anterior
-- Remove automaticamente pacotes que não existiam no snapshot
-- Retorna lista de pacotes desinstalados e falhas
+- **Endpoint:** `POST /api/advanced/{manager_id}/rollback/{snapshot_id}`
+- Restores the system to a previous snapshot state
+- Automatically removes packages not present in the snapshot
+- Returns lists of uninstalled packages and failures
 
 #### 6. Lock File Export
-- **Endpoint**: `GET /api/advanced/{manager_id}/lockfile`
-- **npm**: Exporta `npm list --json` (equivalente a package-lock)
-- **pip**: Exporta `pip freeze` (requirements.txt)
-- Download automático no frontend com formato correto
+- **Endpoint:** `GET /api/advanced/{manager_id}/lockfile`
+- **npm:** Exports `npm list --json` (lockfile equivalent)
+- **pip:** Exports `pip freeze` (requirements.txt)
+- Frontend downloads files with the correct format
 
 ### 🔧 Backend Changes
 
 #### New Files
-- `backend/app/routers/streaming.py` - SSE router
-- `backend/app/routers/advanced.py` - Advanced features router
-- `backend/tests/test_advanced_router.py` - Testes para advanced router
-- `backend/tests/test_streaming_router.py` - Testes para streaming router
+- `backend/app/routers/streaming.py` — SSE router
+- `backend/app/routers/advanced.py` — Advanced feature router
+- `backend/tests/test_advanced_router.py` — Advanced router tests
+- `backend/tests/test_streaming_router.py` — Streaming router tests
 
 #### Modified Files
-- `backend/app/main.py` - Registra novos routers, atualiza versão para 0.2.0
-- `backend/app/routers/__init__.py` - Exporta novos routers
-- `backend/app/adapters/base.py` - Adiciona métodos para:
+- `backend/app/main.py` — Registers new routers, bumps version to 0.2.0
+- `backend/app/routers/__init__.py` — Exposes new routers
+- `backend/app/adapters/base.py` — Adds:
   - `get_dependency_tree()`
   - `scan_vulnerabilities()`
   - `export_lockfile()`
-- `backend/app/adapters/npm.py` - Implementa novas funcionalidades para npm
-- `backend/app/adapters/pip.py` - Implementa novas funcionalidades para pip
+- `backend/app/adapters/npm.py` — Implements new npm features
+- `backend/app/adapters/pip.py` — Implements new pip features
 
 ### 🎨 Frontend Changes
 
 #### New Components
-- `frontend/src/components/VulnerabilityScan.tsx` - Scanner de vulnerabilidades
-- `frontend/src/components/LockfileExport.tsx` - Exportador de lockfiles
+- `frontend/src/components/VulnerabilityScan.tsx` — Vulnerability scanner
+- `frontend/src/components/LockfileExport.tsx` — Lockfile exporter
 
-#### Modified Components
+#### Updated Components
 - `frontend/src/components/ManagerCard.tsx`:
-  - Integra VulnerabilityScan
-  - Integra LockfileExport
-  - Adiciona link para Dependency Tree
-  - UI expandível para "Advanced Features"
+  - Integrates VulnerabilityScan
+  - Integrates LockfileExport
+  - Adds link to Dependency Tree
+  - Expandable UI for "Advanced Features"
 
 ### 📚 Documentation
 
 #### Updated Files
 - `README.md`:
-  - Adiciona seção "What's New in Phase 2"
-  - Atualiza lista de features com Phase 2
-  - Adiciona exemplos de API para features avançadas
-  - Atualiza roadmap (Phase 2 ✅ COMPLETED)
-  - Atualiza status do projeto
-- `CHANGELOG_PHASE2.md` - Este arquivo
+  - Adds "What's New in Phase 2" section
+  - Updates feature list with Phase 2 highlights
+  - Adds API examples for advanced features
+  - Updates roadmap (Phase 2 ✅ COMPLETE)
+  - Refreshes project status
+- `CHANGELOG_PHASE2.md` — This file
 
 ### 🧪 Testing
 
 #### New Test Files
 - `test_advanced_router.py`:
-  - Testes para dependency tree
-  - Testes para vulnerability scanning
-  - Testes para lockfile export
-  - Testes para batch operations
-  - Testes para rollback
+  - Dependency tree tests
+  - Vulnerability scanning tests
+  - Lockfile export tests
+  - Batch operation tests
+  - Rollback tests
 - `test_streaming_router.py`:
-  - Testes para SSE endpoints
-  - Validação de headers SSE
+  - SSE endpoint tests
+  - SSE header validation
 
 ### 🔒 Security
 
-Todas as novas funcionalidades mantêm as mesmas garantias de segurança do Phase 1:
-- ✅ ValidationLayer para sanitização de inputs
-- ✅ LockManager para prevenção de race conditions
-- ✅ OperationQueue para serialização de operações
-- ✅ Snapshots automáticos antes de operações destrutivas
+All new features preserve the security guarantees established in Phase 1:
+- ✅ ValidationLayer for input sanitization
+- ✅ LockManager for race-condition prevention
+- ✅ OperationQueue for serialized mutations
+- ✅ Automatic snapshots before destructive actions
 
 ### 📦 Dependencies
 
-#### Optional Dependencies (para funcionalidades avançadas)
-- **pip-audit**: Para vulnerability scanning no pip
+#### Optional Dependencies (for advanced features)
+- **pip-audit** — pip vulnerability scanning
   ```bash
   pip install pip-audit
   ```
-- **pipdeptree**: Para dependency trees completos no pip
+- **pipdeptree** — pip dependency trees
   ```bash
   pip install pipdeptree
   ```
 
 #### Frontend Dependencies
-Nenhuma dependência nova - usa as existentes:
+No new packages — relies on existing stack:
 - @tanstack/react-query
 - axios
 - react
@@ -129,79 +129,33 @@ Nenhuma dependência nova - usa as existentes:
 
 ### 🚀 Migration Guide
 
-#### Para Atualizar de Phase 1 para Phase 2:
+#### Upgrade from Phase 1 to Phase 2
 
-1. **Pull das alterações**:
+1. **Pull the latest changes:**
    ```bash
    git pull origin main
    ```
 
-2. **Backend** (sem alterações necessárias):
+2. **Backend** (no dependency changes):
    ```bash
    cd backend
-   # As mesmas dependências do Phase 1
+   # Same dependencies as Phase 1
    pip install -r requirements.txt
    uvicorn app.main:app --reload
    ```
 
-3. **Frontend** (sem alterações necessárias):
+3. **Frontend** (no dependency changes):
    ```bash
    cd frontend
-   npm install  # ou yarn install
+   npm install  # or yarn install
    npm run dev
    ```
 
-4. **Opcional - Instalar ferramentas de análise**:
+4. **Optional — Install analysis tools:**
    ```bash
-   # Para vulnerability scanning no pip
+   # For pip vulnerability scanning
    pip install pip-audit
 
-   # Para dependency trees completos no pip
+   # For full pip dependency trees
    pip install pipdeptree
    ```
-
-5. **Acessar nova documentação**:
-   - API docs: http://localhost:8000/docs
-   - Novos endpoints aparecem automaticamente na documentação interativa
-
-### 🎯 API Endpoints Summary
-
-#### Phase 2 Endpoints
-
-```
-# Streaming
-GET  /api/streaming/{manager_id}/packages/{package_name}/uninstall
-
-# Advanced Features
-GET  /api/advanced/{manager_id}/dependency-tree
-GET  /api/advanced/{manager_id}/dependency-tree/{package_name}
-GET  /api/advanced/{manager_id}/vulnerabilities
-GET  /api/advanced/{manager_id}/lockfile
-POST /api/advanced/{manager_id}/batch-uninstall
-POST /api/advanced/{manager_id}/rollback/{snapshot_id}
-```
-
-### 🐛 Known Limitations
-
-1. **Rollback**: Apenas remove pacotes excedentes, não reinstala pacotes ausentes (install functionality não implementado)
-2. **Vulnerability Scanning**:
-   - pip: Requer `pip-audit` instalado
-   - Alguns gestores podem não ter suporte nativo
-3. **Dependency Trees**:
-   - pip: Funcionalidade limitada sem `pipdeptree`
-   - winget/brew: Não implementado (retorna mensagem de não suportado)
-
-### 🔜 Next Steps (Phase 3)
-
-- Multi-user support
-- Cloud backup integration
-- Advanced analytics
-- Plugin system
-- Usage recommendations
-- Package installation functionality (para rollback completo)
-
----
-
-**Full Release**: Phase 2 Complete
-**Version**: 0.2.0
-**Date**: 2025-11-05

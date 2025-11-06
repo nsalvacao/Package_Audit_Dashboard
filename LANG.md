@@ -1,215 +1,151 @@
-# Language Guidelines / Guia de Idiomas
+# Language Guidelines
 
-## Language Policy / Política de Idioma
+## Language Policy
 
-This document describes the language policy for Package Audit Dashboard.
-
-Este documento descreve a política de idioma para o Package Audit Dashboard.
+This document defines the language policy for the Package Audit Dashboard project.
 
 ---
 
-## Primary Language / Idioma Principal
+## Primary Language
 
-**English** is the primary language for this project.
-
-**Inglês** é o idioma principal deste projeto.
+**English** is the authoritative language for all project artifacts.
 
 ---
 
-## Language Distribution / Distribuição de Idiomas
+## Language Expectations
 
-### Code / Código
+### Code
 
 - **Variable names**: English only
 - **Function names**: English only
 - **Class names**: English only
-- **Comments**: English preferred, Portuguese accepted
+- **Comments**: English preferred (Portuguese allowed only when it materially improves clarity)
 - **Docstrings**: English only
 
-**Português:**
-- **Nomes de variáveis**: Apenas inglês
-- **Nomes de funções**: Apenas inglês
-- **Nomes de classes**: Apenas inglês
-- **Comentários**: Inglês preferencial, português aceite
-- **Docstrings**: Apenas inglês
-
-### Documentation / Documentação
+### Documentation
 
 | Document | Language | Notes |
 |----------|----------|-------|
-| README.md | Portuguese/English Mix | Main description in Portuguese, technical details in English |
-| API.md | English | API documentation in English |
-| CONTRIBUTING.md | English | Contributing guidelines in English |
-| SECURITY.md | English | Security documentation in English |
-| CHANGELOG*.md | English | Release notes in English |
-| OPTIONAL_DEPENDENCIES.md | English | Setup instructions in English |
-| ENV_SETUP.md | English | Configuration guide in English |
-| DOCKER.md | English | Docker documentation in English |
-| Code comments | English (preferred) | Can use Portuguese for complex logic |
-| Git commits | English | Commit messages in English |
-| Issues/PRs | English/Portuguese | Both accepted, English preferred |
+| README.md | English | Main project overview |
+| API.md | English | REST API documentation |
+| CONTRIBUTING.md | English | Contribution guidelines |
+| SECURITY.md | English | Security architecture |
+| CHANGELOG*.md | English | Release notes |
+| OPTIONAL_DEPENDENCIES.md | English | Optional tool setup |
+| ENV_SETUP.md | English | Environment configuration |
+| DOCKER.md | English | Docker usage |
+| Code comments | English (preferred) | Portuguese permitted for highly complex logic |
+| Git commits | English | All commit messages |
+| Issues/PRs | English (preferred) | Portuguese acceptable when necessary |
 
-### User Interface / Interface de Utilizador
+### User Interface
 
 | Component | Language | Notes |
 |-----------|----------|-------|
-| API responses | English | All error messages and responses in English |
-| CLI output | English | Terminal output in English |
-| Web dashboard | English | UI labels and messages in English |
-| Logs | English | All log messages in English |
+| API responses | English | Error messages and payloads |
+| CLI output | English | Terminal interactions |
+| Web dashboard | English | UI labels and notifications |
+| Logs | English | Operational logging |
 
 ---
 
-## Rationale / Justificação
+## Rationale
 
-### Why English? / Porquê Inglês?
+### Why English?
 
-1. **International collaboration**: English makes the project accessible to global contributors
-2. **Technical standard**: Most programming documentation is in English
-3. **Library integration**: External APIs and libraries use English
-4. **Career development**: Contributors practice technical English
+1. **International collaboration** — English keeps the project accessible to all contributors
+2. **Technical consistency** — Most libraries, APIs, and reference material use English
+3. **Easier integration** — External tooling expects English naming conventions
+4. **Professional growth** — Contributors can practice technical English in a real project
 
-### Why Portuguese README? / Porquê README em Português?
+### Why keep historical Portuguese references in git history?
 
-1. **Target audience**: Initial users are Portuguese-speaking
-2. **Local context**: Project started in Portuguese environment
-3. **Accessibility**: Easier onboarding for local users
-4. **Gradual transition**: Can migrate to full English later
+1. **Audience continuity** — Earlier iterations targeted Portuguese-speaking users
+2. **Context preservation** — Some architectural decisions were recorded in Portuguese
+3. **Accessibility** — Existing contributors can refer to previous notes if needed
+4. **Gradual migration** — The project transitioned to English without erasing prior work
 
 ---
 
-## Migration Plan / Plano de Migração
+## Migration Plan
 
-### Current State / Estado Atual
+### Current Status
 
-- ✅ Code: 100% English
+- ✅ Codebase: 100% English
 - ✅ API: 100% English
-- ⚠️ README: Mixed (Portuguese intro, English technical)
-- ✅ Documentation: 90% English
-- ✅ Comments: Mostly English
+- ✅ README: Fully translated
+- ✅ Documentation: 100% English
+- ✅ Comments: Mostly English (Portuguese allowed only when clarifying complex logic)
 
-### Future Goals / Objetivos Futuros
+### Future Goals
 
-**v1.0.0 (Q4 2025)**:
-- Maintain Portuguese README intro
-- All new documentation in English
-- Gradually translate existing Portuguese comments
+**v1.0.0 (Q4 2025):**
+- Maintain English documentation as the default source of truth
+- Provide Portuguese addenda when community demand justifies it
+- Continue translating legacy Portuguese comments as they are touched
 
-**v2.0.0 (2026)**:
-- Consider full English README with Portuguese translation
-- Implement i18n for web dashboard (optional)
-- Multi-language documentation support
+**v2.0.0 (2026):**
+- Evaluate full i18n support for the web dashboard
+- Offer localized documentation packs if maintainers are available
+- Automate translation workflows where possible
 
 ---
 
-## Best Practices / Melhores Práticas
+## Best Practices
 
-### For Contributors / Para Contribuidores
+### For Contributors
 
-#### English-speaking contributors:
+#### English-speaking contributors
 
 ```python
 # ✅ Good
 def validate_package_name(name: str) -> bool:
     """Validate package name format."""
-    return bool(re.match(r'^[a-zA-Z0-9@/_.-]+$', name))
+    return bool(re.match(r"^[a-zA-Z0-9@/_.-]+$", name))
 
 # ❌ Avoid
 def validar_nome_pacote(nome: str) -> bool:
-    """Validar formato do nome do pacote."""
-    return bool(re.match(r'^[a-zA-Z0-9@/_.-]+$', nome))
+    """Validate package name format."""
+    return bool(re.match(r"^[a-zA-Z0-9@/_.-]+$", nome))
 ```
 
-#### Portuguese-speaking contributors:
+#### Portuguese-speaking contributors
 
 ```python
 # ✅ Acceptable for complex logic
 def process_dependency_tree(root_package: str) -> dict:
     """Process package dependency tree."""
-    # Primeiro, verificamos se o pacote existe
-    # Em seguida, obtemos todas as dependências recursivamente
+    # First, verify that the package exists
+    # Then, recursively collect all dependencies
     pass
 
-# ✅ Better - use English comments
+# ✅ Better — keep comments in English when possible
 def process_dependency_tree(root_package: str) -> dict:
     """Process package dependency tree."""
-    # First, check if package exists
+    # First, check if the package exists
     # Then, recursively fetch all dependencies
     pass
 ```
 
-### For Documentation / Para Documentação
+### For Documentation
 
 When documenting features:
 
-1. **Write in English first**: Primary documentation should be English
-2. **Add Portuguese notes** (optional): For complex concepts, add Portuguese explanations
-3. **Use clear language**: Avoid idioms and colloquialisms
-4. **Provide examples**: Code examples are language-agnostic
+1. **Write in English first** — English is the canonical source
+2. **Add Portuguese notes only when critical** — Keep the main flow in English
+3. **Use clear, direct language** — Avoid idioms and region-specific jargon
+4. **Include examples** — Code snippets remain language-agnostic
 
 ---
 
-## Translation Guidelines / Guias de Tradução
+## Translation Guidelines
 
-### Common Terms / Termos Comuns
+### Common Terms
 
 | English | Portuguese | Usage |
-|---------|-----------|-------|
-| package | pacote | Use "package" in code/docs |
-| manager | gestor | Use "manager" in code/docs |
-| snapshot | snapshot | Keep English term |
-| rollback | rollback | Keep English term |
-| vulnerability | vulnerabilidade | Use "vulnerability" in code |
-| dependency | dependência | Use "dependency" in code |
-
-### Do Not Translate / Não Traduzir
-
-These terms should **always be in English**:
-
-- Technical terms: API, CLI, REST, JSON, HTTP, SSE
-- Tool names: Docker, npm, pip, FastAPI, React
-- Code concepts: middleware, router, endpoint, request, response
-- Command line: install, uninstall, list, audit
-
----
-
-## Questions / Questões
-
-### For English speakers:
-
-**Q**: Should I write comments in English?
-**A**: Yes, always write code comments in English.
-
-**Q**: Can I create issues in English?
-**A**: Yes, English issues are welcome and preferred.
-
-**Q**: What about git commit messages?
-**A**: Use English, following Conventional Commits format.
-
-### For Portuguese speakers:
-
-**Q**: Posso escrever comentários em português?
-**A**: Pode, mas inglês é preferencial. Use português apenas para lógica complexa que seja mais fácil explicar.
-
-**Q**: E as issues no GitHub?
-**A**: Ambos os idiomas são aceites, mas inglês é preferencial para aumentar o alcance do projeto.
-
-**Q**: Devo traduzir o README para inglês?
-**A**: Por enquanto não. Mantenha a introdução em português. A partir da v1.0 consideraremos tradução completa.
-
----
-
-## Contact / Contacto
-
-For questions about language policy:
-- Open an issue: https://github.com/nsalvacao/Package_Audit_Dashboard/issues
-- Discussions: https://github.com/nsalvacao/Package_Audit_Dashboard/discussions
-
-Para questões sobre a política de idioma:
-- Abrir issue: https://github.com/nsalvacao/Package_Audit_Dashboard/issues
-- Discussões: https://github.com/nsalvacao/Package_Audit_Dashboard/discussions
-
----
-
-**Last Updated**: 2025-11-05
-**Version**: 1.0
+|---------|------------|-------|
+| package | pacote | Prefer the English term in code and docs |
+| manager | gestor | Prefer the English term in code and docs |
+| snapshot | snapshot | English term is standard |
+| rollback | rollback | English term is standard |
+| audit | auditoria | Use "audit" in technical contexts |
