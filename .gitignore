@@ -37,3 +37,16 @@ Thumbs.db
 *.lock
 .cache/
 data/
+
+# GitHub Codespaces
+.devcontainer/.env
+*.code-workspace
+
+# Environment files (keep .env.example)
+.env
+backend/.env
+frontend/.env
+
+# Generated scripts
+start-all.sh
+test-backend.sh

@@ -1,5 +1,6 @@
 # 📦 Package Audit Dashboard
 
+[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/nsalvacao/Package_Audit_Dashboard?quickstart=1)
 [![Tests](https://github.com/nsalvacao/Package_Audit_Dashboard/actions/workflows/test.yml/badge.svg)](https://github.com/nsalvacao/Package_Audit_Dashboard/actions/workflows/test.yml)
 [![Docker Build](https://github.com/nsalvacao/Package_Audit_Dashboard/actions/workflows/docker.yml/badge.svg)](https://github.com/nsalvacao/Package_Audit_Dashboard/actions/workflows/docker.yml)
 [![codecov](https://codecov.io/gh/nsalvacao/Package_Audit_Dashboard/branch/main/graph/badge.svg)](https://codecov.io/gh/nsalvacao/Package_Audit_Dashboard)
@@ -39,7 +40,37 @@ Local dashboard (plus CLI companion) for auditing, managing, and maintaining pac
 
 ## 🚀 Quick Start
 
-### Option 1: Automated Setup (Recommended)
+### Option 1: GitHub Codespaces (☁️ Instant Cloud Development)
+
+**Perfect for**: Quick start, no local setup, GitHub Student Pack users
+
+Click the badge at the top or use this button:
+
+[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/nsalvacao/Package_Audit_Dashboard?quickstart=1)
+
+**What you get**:
+- ✅ Fully configured dev environment in ~3 minutes
+- ✅ All dependencies pre-installed (Python, Node, Docker)
+- ✅ VS Code in browser with GitHub Copilot enabled
+- ✅ Automatic port forwarding for frontend & backend
+- ✅ 180 core-hours/month free with Student Developer Pack
+
+**After Codespace starts**:
+```bash
+# Everything is set up automatically!
+# Just run:
+./start-all.sh
+
+# Or start services individually:
+# Backend:  cd backend && source .venv/bin/activate && uvicorn app.main:app --reload
+# Frontend: cd frontend && npm run dev
+```
+
+**📖 Full guide**: See [docs/CODESPACES.md](docs/CODESPACES.md) for detailed Codespaces usage and [docs/COPILOT_GUIDE.md](docs/COPILOT_GUIDE.md) for GitHub Copilot integration.
+
+---
+
+### Option 2: Automated Local Setup
 
 ```bash
 # Clone the repository
@@ -53,7 +84,7 @@ cd Package_Audit_Dashboard
 python3 scripts/quick_setup.py
 ```
 
-### Option 2: Manual Setup
+### Option 3: Manual Setup
 
 #### 1. Backend Setup
 

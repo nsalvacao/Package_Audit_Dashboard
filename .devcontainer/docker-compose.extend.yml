@@ -1,0 +1,49 @@
+version: '3.8'
+
+services:
+  backend:
+    # Override for Codespaces development
+    build:
+      context: ..
+      dockerfile: .devcontainer/Dockerfile
+
+    volumes:
+      # Mount workspace
+      - ..:/workspace:cached
+      # Preserve Python virtual environment
+      - venv-data:/workspace/backend/.venv
+      # Preserve node_modules
+      - node-modules-data:/workspace/frontend/node_modules
+      # Mount bash history
+      - ~/.bash_history:/home/vscode/.bash_history
+
+    environment:
+      # Development environment
+      - API_HOST=0.0.0.0
+      - API_PORT=8000
+      - API_RELOAD=true
+      - CORS_ORIGINS=*
+      - LOG_LEVEL=DEBUG
+      - DEBUG=true
+      - PYTHONPATH=/workspace/backend
+      - WORKSPACE_DIR=/workspace
+
+    # Override command to keep container running
+    command: sleep infinity
+
+    # Capabilities for package manager operations
+    cap_add:
+      - SYS_ADMIN
+
+    security_opt:
+      - seccomp:unconfined
+
+  frontend:
+    # Frontend runs in the same container for Codespaces
+    # No need for separate service
+    profiles:
+      - disabled
+
+volumes:
+  venv-data:
+  node-modules-data:
