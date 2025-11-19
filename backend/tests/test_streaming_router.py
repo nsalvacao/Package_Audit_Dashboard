@@ -24,8 +24,9 @@ class TestStreamingUninstall:
 
     def test_streaming_uninstall_invalid_package_name(self):
         """Testa streaming com nome de pacote inválido."""
+        # URL-encode the dots to prevent path normalization by HTTP client
         response = client.get(
-            "/api/streaming/npm/packages/../../../etc/passwd/uninstall",
+            "/api/streaming/npm/packages/..%2F..%2F..%2Fetc%2Fpasswd/uninstall",
             headers={"Accept": "text/event-stream"},
         )
         assert response.status_code == 200
