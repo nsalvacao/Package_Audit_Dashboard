@@ -3,7 +3,7 @@
 <div align="center">
 
 ![Package Audit Dashboard](https://img.shields.io/badge/Version-0.2.0-blue)
-![Python](https://img.shields.io/badge/python-3.8+-blue.svg)
+![Python](https://img.shields.io/badge/python-3.10+-blue.svg)
 ![FastAPI](https://img.shields.io/badge/FastAPI-0.109-green.svg)
 ![React](https://img.shields.io/badge/React-18-blue.svg)
 ![License](https://img.shields.io/badge/License-MIT-yellow.svg)
@@ -151,7 +151,7 @@ Visualize complete dependency hierarchies.
 ## 🛠️ Requirements
 
 ### Backend
-- Python 3.8+
+- Python 3.10+
 - pip
 - virtualenv
 

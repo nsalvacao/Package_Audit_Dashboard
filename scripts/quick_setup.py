@@ -39,12 +39,12 @@ def print_error(message: str) -> None:
 
 
 def check_python_version() -> bool:
-    """Check if Python version is 3.8+."""
+    """Check if Python version is 3.10+."""
     version = sys.version_info
-    if version.major >= 3 and version.minor >= 8:
+    if version.major >= 3 and version.minor >= 10:
         print_success(f"Python {version.major}.{version.minor}.{version.micro} found")
         return True
-    print_error(f"Python {version.major}.{version.minor} found. Python 3.8+ required.")
+    print_error(f"Python {version.major}.{version.minor} found. Python 3.10+ required.")
     return False
 
 
