@@ -34,7 +34,7 @@ kubernetes==29.0.0
 grpcio==1.60.0
 
 # Python Compatibility
-importlib-resources==6.1.1; python_version < "3.9"
+# No longer needed for Python 3.10+
 
 # Development Tools (optional - uncomment if needed)
 # black==24.1.1

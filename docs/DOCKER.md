@@ -4,6 +4,29 @@
 
 Package Audit Dashboard can be run using Docker and Docker Compose for simplified development and deployment.
 
+## ⚠️ Important: Docker vs Native Installation
+
+**Docker installation limitations:**
+- Docker containers are **isolated environments**
+- When running in Docker, the application can only audit and manage packages **inside the container**
+- Docker setup is ideal for **development, testing, and isolated environments**
+
+**For auditing your host system's packages (npm, pip, brew, winget):**
+- Use **native installation** instead of Docker
+- Native installation allows the application to interact with your system's actual package managers
+- See the main [README.md](../README.md) for native installation options
+
+**When to use Docker:**
+- ✅ Development and testing
+- ✅ Isolated environment testing
+- ✅ Learning and experimentation
+- ❌ NOT for auditing your real system's packages
+
+**When to use Native Installation:**
+- ✅ Auditing and managing your host system's packages
+- ✅ Production use on the actual system
+- ✅ Working with system package managers directly
+
 ## Prerequisites
 
 - Docker 20.10+

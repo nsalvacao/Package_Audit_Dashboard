@@ -17,5 +17,5 @@ setup(
             "audit-cli=cli.audit_cli.app:app",
         ],
     },
-    python_requires=">=3.8",
+    python_requires=">=3.10",
 )

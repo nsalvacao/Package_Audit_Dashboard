@@ -29,7 +29,7 @@ This project adheres to a Code of Conduct. By participating, you are expected to
 
 ### Prerequisites
 
-- Python 3.8+
+- Python 3.10+
 - Node.js 18+
 - Git
 - Docker (optional, for containerized development)

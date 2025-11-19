@@ -4,7 +4,7 @@
 [![Tests](https://github.com/nsalvacao/Package_Audit_Dashboard/actions/workflows/test.yml/badge.svg)](https://github.com/nsalvacao/Package_Audit_Dashboard/actions/workflows/test.yml)
 [![Docker Build](https://github.com/nsalvacao/Package_Audit_Dashboard/actions/workflows/docker.yml/badge.svg)](https://github.com/nsalvacao/Package_Audit_Dashboard/actions/workflows/docker.yml)
 [![codecov](https://codecov.io/gh/nsalvacao/Package_Audit_Dashboard/branch/main/graph/badge.svg)](https://codecov.io/gh/nsalvacao/Package_Audit_Dashboard)
-[![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
+[![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.109-green.svg)](https://fastapi.tiangolo.com/)
 [![React 18](https://img.shields.io/badge/React-18-blue.svg)](https://reactjs.org/)
 [![Node 18+](https://img.shields.io/badge/node-18+-brightgreen.svg)](https://nodejs.org/)
@@ -70,7 +70,42 @@ Click the badge at the top or use this button:
 
 ---
 
-### Option 2: Automated Local Setup
+### Option 2: Docker Setup (Isolated Environment)
+
+**Perfect for**: Testing, development, isolated environments
+
+**⚠️ Important Note**: Docker installation audits packages **inside the container** only. For auditing your host system's packages (npm, pip, brew, winget), use **Option 3 or 4** (native installation).
+
+```bash
+# Clone the repository
+git clone https://github.com/nsalvacao/Package_Audit_Dashboard.git
+cd Package_Audit_Dashboard
+
+# Start all services with Docker Compose
+docker-compose up -d
+
+# Access the application
+# Frontend: http://localhost:5173
+# Backend API: http://localhost:8000
+# API Docs: http://localhost:8000/docs
+```
+
+**What you get with Docker**:
+- ✅ Isolated environment
+- ✅ No dependency installation on host
+- ✅ Quick setup with one command
+- ⚠️ Only audits container packages, not host system
+
+**To stop services**:
+```bash
+docker-compose down
+```
+
+---
+
+### Option 3: Automated Local Setup (Native - Recommended for System Auditing)
+
+**Perfect for**: Auditing your actual system's installed packages (npm, pip, brew, winget)
 
 ```bash
 # Clone the repository
@@ -84,7 +119,9 @@ cd Package_Audit_Dashboard
 python3 scripts/quick_setup.py
 ```
 
-### Option 3: Manual Setup
+---
+
+### Option 4: Manual Setup (Native)
 
 #### 1. Backend Setup
 
