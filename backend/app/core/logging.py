@@ -6,7 +6,7 @@ import logging
 import sys
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Optional
+from typing import Any, Dict, Optional
 
 # ANSI color codes
 RESET = "\033[0m"
@@ -116,7 +116,7 @@ class StructuredLogger:
             name: Logger name (typically __name__)
         """
         self.logger = logging.getLogger(name)
-        self._extra_context: dict[str, Any] = {}
+        self._extra_context: Dict[str, Any] = {}
 
     def with_context(self, **kwargs: Any) -> StructuredLogger:
         """

@@ -5,7 +5,7 @@ import platform
 import sys
 from datetime import datetime
 from pathlib import Path
-from typing import Optional
+from typing import Dict, Optional
 
 from fastapi import APIRouter
 from pydantic import BaseModel
@@ -27,7 +27,7 @@ class HealthStatus(BaseModel):
 class DetailedHealthStatus(HealthStatus):
     """Detailed health check with additional system info."""
 
-    package_managers: dict[str, bool]
+    package_managers: Dict[str, bool]
     storage_available: bool
     storage_path: str
 
