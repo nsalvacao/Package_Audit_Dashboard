@@ -89,7 +89,7 @@ async def event_generator(
 
 
 @router.get(
-    "/{manager_id}/packages/{package_name}/uninstall",
+    "/{manager_id}/packages/{package_name:path}/uninstall",
     summary="Desinstala pacote com streaming em tempo real (SSE)",
 )
 async def uninstall_package_stream(
