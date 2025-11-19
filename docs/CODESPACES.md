@@ -11,7 +11,7 @@ Complete guide for developing Package Audit Dashboard using GitHub Codespaces.
 3. [First-Time Setup](#first-time-setup)
 4. [Development Workflow](#development-workflow)
 5. [Using GitHub Copilot](#using-github-copilot)
-6. [Port Forwarding & Access](#port-forwarding--access)
+6. [Port Forwarding and Access](#port-forwarding-and-access)
 7. [Running Tests](#running-tests)
 8. [Troubleshooting](#troubleshooting)
 9. [Best Practices](#best-practices)
@@ -429,7 +429,7 @@ Copilot: [generates React component code]
 
 ---
 
-## Port Forwarding & Access
+## Port Forwarding and Access
 
 ### Automatic Port Forwarding
 
