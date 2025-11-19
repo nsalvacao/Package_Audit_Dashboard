@@ -50,3 +50,6 @@ frontend/.env
 # Generated scripts
 start-all.sh
 test-backend.sh
+
+# MkDocs build output
+site/

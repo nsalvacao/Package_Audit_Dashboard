@@ -84,41 +84,18 @@ plugins:
 nav:
   - Home: index.md
   - Getting Started:
-      - Quick Start: getting-started/quick-start.md
-      - Installation: getting-started/installation.md
-      - Configuration: getting-started/configuration.md
-      - First Steps: getting-started/first-steps.md
-  - User Guide:
-      - Dashboard: user-guide/dashboard.md
-      - CLI Usage: user-guide/cli.md
-      - Common Workflows: user-guide/workflows.md
+      - Codespaces Setup: CODESPACES.md
+      - Copilot Guide: COPILOT_GUIDE.md
+      - PATH Setup: SETUP_PATH.md
       - Optional Dependencies: OPTIONAL_DEPENDENCIES.md
-  - Features:
-      - Auto-Discovery: features/auto-discovery.md
-      - Package Management: features/package-management.md
-      - Security Scanning: features/security.md
-      - Dependency Trees: features/dependencies.md
-      - Real-time Streaming: features/streaming.md
-      - Batch Operations: features/batch-operations.md
-  - API Reference:
-      - Overview: api/overview.md
-      - Endpoints: API.md
-      - Authentication: api/authentication.md
-      - Rate Limiting: api/rate-limiting.md
   - Deployment:
       - Docker: DOCKER.md
       - Environment Setup: ENV_SETUP.md
-      - Production: deployment/production.md
+  - API Reference:
+      - API Documentation: API.md
   - Development:
-      - Contributing: ../CONTRIBUTING.md
-      - Architecture: development/architecture.md
       - Security: SECURITY.md
-      - Testing: development/testing.md
-  - Reference:
-      - Roadmap: reference/roadmap.md
-      - Changelog: ../CHANGELOG_PHASE2.md
       - Limitations: LIMITATIONS.md
-      - FAQ: reference/faq.md
 
 extra:
   social:

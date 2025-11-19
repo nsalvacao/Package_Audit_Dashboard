@@ -4,7 +4,7 @@ from __future__ import annotations
 import time
 from collections import defaultdict
 from threading import Lock
-from typing import Callable, Optional
+from typing import Callable, Dict, List, Optional, Tuple
 
 from fastapi import HTTPException, Request, Response, status
 
@@ -36,12 +36,12 @@ class RateLimiter:
         self.requests_per_hour = requests_per_hour
 
         # Storage: {ip: {minute: [(timestamp, count)], hour: [(timestamp, count)]}}
-        self._storage: dict[str, dict[str, list[tuple[float, int]]]] = defaultdict(
+        self._storage: Dict[str, Dict[str, List[Tuple[float, int]]]] = defaultdict(
             lambda: {"minute": [], "hour": []}
         )
         self._lock = Lock()
 
-    def _clean_old_entries(self, entries: list[tuple[float, int]], window: float) -> list[tuple[float, int]]:
+    def _clean_old_entries(self, entries: List[Tuple[float, int]], window: float) -> List[Tuple[float, int]]:
         """
         Remove entries older than the time window.
 
@@ -270,7 +270,7 @@ class PathRateLimiter:
             "/api/discover": (30, 300),
             "/api/managers": (60, 1000),
         }
-        self._limiters: dict[str, RateLimiter] = {}
+        self._limiters: Dict[str, RateLimiter] = {}
 
     def get_limiter_for_path(self, path: str) -> Optional[RateLimiter]:
         """

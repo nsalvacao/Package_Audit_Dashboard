@@ -10,7 +10,7 @@
 
 **Centralized package manager auditing and management with advanced security features**
 
-[Quick Start](getting-started/quick-start.md){ .md-button .md-button--primary }
+[Codespaces Setup](CODESPACES.md){ .md-button .md-button--primary }
 [View on GitHub](https://github.com/nsalvacao/Package_Audit_Dashboard){ .md-button }
 
 </div>
@@ -73,7 +73,7 @@ npm install
 npm run dev
 ```
 
-[View detailed installation guide →](getting-started/installation.md)
+[View Codespaces setup →](CODESPACES.md)
 
 ## 🏗️ Architecture
 
@@ -163,19 +163,19 @@ Visualize complete dependency hierarchies.
 - pip-audit (for Python vulnerability scanning)
 - pipdeptree (for Python dependency trees)
 
-[View complete requirements →](getting-started/installation.md#requirements)
+[View optional dependencies →](OPTIONAL_DEPENDENCIES.md)
 
 ## 📚 Documentation
 
-- **[Quick Start](getting-started/quick-start.md)** - Get up and running quickly
-- **[User Guide](user-guide/dashboard.md)** - Learn how to use the dashboard
+- **[Codespaces Setup](CODESPACES.md)** - Get up and running quickly with GitHub Codespaces
+- **[Copilot Guide](COPILOT_GUIDE.md)** - Learn to use GitHub Copilot effectively
 - **[API Reference](API.md)** - Complete API documentation
-- **[Development](../CONTRIBUTING.md)** - Contributing guidelines
+- **[PATH Setup](SETUP_PATH.md)** - Configure PATH for package managers
 - **[Docker Guide](DOCKER.md)** - Docker deployment
 
 ## 🤝 Contributing
 
-Contributions are welcome! Check out our [contributing guidelines](../CONTRIBUTING.md).
+Contributions are welcome! Check out our [GitHub repository](https://github.com/nsalvacao/Package_Audit_Dashboard).
 
 ```bash
 # Fork and clone
@@ -204,7 +204,7 @@ This project is licensed under the MIT License - see the [LICENSE](https://githu
 - Plugin system for extensibility
 - AI-powered usage recommendations
 
-[View full roadmap →](reference/roadmap.md)
+See [GitHub Issues](https://github.com/nsalvacao/Package_Audit_Dashboard/issues) for more details.
 
 ## 💬 Support
 
