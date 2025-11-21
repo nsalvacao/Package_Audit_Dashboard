@@ -79,7 +79,7 @@ echo ""
 
 # Test 8: Check documentation
 echo "Test 8: Checking documentation..."
-if [ ! -f "docs/INSTALLATION.md" ] || [ ! -f "docs/USAGE.md" ]; then
+if [ ! -f "docs/guides/INSTALLATION.md" ] || [ ! -f "docs/guides/USAGE.md" ]; then
     echo "❌ FAIL: Documentation files missing"
     exit 1
 fi
@@ -98,7 +98,7 @@ echo "  Linux/macOS/WSL: ./scripts/install-docker-host.sh"
 echo "  Windows:         .\scripts\install-docker-host.ps1"
 echo ""
 echo "For more information:"
-echo "  Installation: docs/INSTALLATION.md"
-echo "  Usage:        docs/USAGE.md"
-echo "  Docker:       docs/DOCKER.md"
+echo "  Installation: docs/guides/INSTALLATION.md"
+echo "  Usage:        docs/guides/USAGE.md"
+echo "  Docker:       docs/deployment/DOCKER.md"
 echo ""
