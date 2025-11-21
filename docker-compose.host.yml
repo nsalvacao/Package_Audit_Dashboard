@@ -62,7 +62,9 @@ services:
       # Host temporary directory
       - /tmp:/host/tmp
     
-    # Privileged mode for full host access (use with caution)
+    # ⚠️ SECURITY WARNING: Privileged mode grants extensive host access
+    # Only enable if absolutely necessary for your use case
+    # Default is false for security. Set DOCKER_PRIVILEGED=true in .env to enable
     privileged: ${DOCKER_PRIVILEGED:-false}
     
     # Additional capabilities for host operations

@@ -20,14 +20,20 @@ if ! command -v docker &> /dev/null; then
 fi
 
 # Check if Docker Compose is installed
-if ! command -v docker-compose &> /dev/null && ! docker compose version &> /dev/null; then
+COMPOSE_VERSION=""
+if docker compose version &> /dev/null; then
+    COMPOSE_VERSION="plugin ($(docker compose version))"
+    echo "✅ Docker Compose (plugin): $COMPOSE_VERSION"
+elif command -v docker-compose &> /dev/null; then
+    COMPOSE_VERSION="standalone ($(docker-compose --version))"
+    echo "✅ Docker Compose (standalone): $COMPOSE_VERSION"
+else
     echo "❌ Error: Docker Compose is not installed"
     echo "Please install Docker Compose from: https://docs.docker.com/compose/install/"
     exit 1
 fi
 
 echo "✅ Docker installed: $(docker --version)"
-echo "✅ Docker Compose installed"
 echo ""
 
 # Check if Docker daemon is running

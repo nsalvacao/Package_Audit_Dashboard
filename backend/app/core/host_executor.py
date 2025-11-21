@@ -129,6 +129,8 @@ class HostCommandExecutor:
         logger.info("Executing command via Docker: %s", " ".join(command))
         
         try:
+            import shlex
+            
             # Build the docker command to execute on host
             docker_command = [
                 "docker", "run",
@@ -145,23 +147,26 @@ class HostCommandExecutor:
                     "mcr.microsoft.com/powershell:latest",
                     "pwsh", "-Command",
                 ])
+                # For PowerShell, pass command as-is (no shell escaping needed)
+                docker_command.extend(command)
             elif shell == "cmd":
                 # Use Wine for CMD emulation
                 docker_command.extend([
                     "alpine:latest",
                     "sh", "-c",
                 ])
-                command = [" ".join(command)]  # Wrap for sh -c
+                # Properly escape and join for shell execution
+                escaped_command = " ".join(shlex.quote(arg) for arg in command)
+                docker_command.append(escaped_command)
             else:
                 # Use Alpine Linux for bash/sh commands
                 docker_command.extend([
                     "alpine:latest",
                     "sh", "-c",
                 ])
-                command = [" ".join(command)]  # Wrap for sh -c
-            
-            # Add the actual command
-            docker_command.extend(command)
+                # Properly escape and join for shell execution
+                escaped_command = " ".join(shlex.quote(arg) for arg in command)
+                docker_command.append(escaped_command)
             
             result = subprocess.run(
                 docker_command,
@@ -188,6 +193,8 @@ class HostCommandExecutor:
         logger.info("Executing command via SSH: %s", " ".join(command))
         
         try:
+            import shlex
+            
             # Build SSH command
             ssh_command = [
                 "ssh",
@@ -199,13 +206,19 @@ class HostCommandExecutor:
                 f"{self.ssh_user}@{self.ssh_host}",
             ]
             
-            # Add shell-specific wrapper
+            # Add shell-specific wrapper with proper escaping
             if shell == "powershell":
-                ssh_command.append(f"pwsh -Command '{' '.join(command)}'")
+                # Escape for PowerShell and SSH
+                escaped_cmd = " ".join(shlex.quote(arg) for arg in command)
+                ssh_command.append(f"pwsh -Command {shlex.quote(escaped_cmd)}")
             elif shell == "cmd":
-                ssh_command.append(f"cmd /c {' '.join(command)}")
+                # Escape for CMD and SSH
+                escaped_cmd = " ".join(shlex.quote(arg) for arg in command)
+                ssh_command.append(f"cmd /c {escaped_cmd}")
             else:
-                ssh_command.append(" ".join(command))
+                # Escape for bash/sh and SSH
+                escaped_cmd = " ".join(shlex.quote(arg) for arg in command)
+                ssh_command.append(escaped_cmd)
             
             result = subprocess.run(
                 ssh_command,
@@ -304,13 +317,26 @@ class HostCommandExecutor:
         return self.execute(command, timeout=timeout, shell="bash")
 
 
-# Global instance
+# Thread-safe singleton implementation
+import threading
+
 _host_executor: Optional[HostCommandExecutor] = None
+_executor_lock = threading.Lock()
 
 
 def get_host_executor() -> HostCommandExecutor:
-    """Get the global host executor instance."""
+    """
+    Get the global host executor instance (thread-safe singleton).
+    
+    Returns:
+        HostCommandExecutor: The singleton instance
+    """
     global _host_executor
+    
+    # Double-checked locking pattern for thread safety
     if _host_executor is None:
-        _host_executor = HostCommandExecutor()
+        with _executor_lock:
+            if _host_executor is None:
+                _host_executor = HostCommandExecutor()
+    
     return _host_executor

@@ -21,15 +21,20 @@ if (-not $dockerInstalled) {
 
 Write-Host "✅ Docker installed: $(docker --version)" -ForegroundColor Green
 
-# Check if Docker Compose is available
+# Check if Docker Compose is available (plugin version preferred)
 $composeVersion = docker compose version 2>&1
-if ($LASTEXITCODE -ne 0) {
+$composeStandalone = Get-Command docker-compose -ErrorAction SilentlyContinue
+
+if ($LASTEXITCODE -eq 0) {
+    Write-Host "✅ Docker Compose (plugin): $composeVersion" -ForegroundColor Green
+} elseif ($composeStandalone) {
+    Write-Host "✅ Docker Compose (standalone): $(docker-compose --version)" -ForegroundColor Green
+    Write-Host "ℹ️  Note: Consider upgrading to Docker Desktop with integrated Compose plugin" -ForegroundColor Cyan
+} else {
     Write-Host "❌ Error: Docker Compose is not available" -ForegroundColor Red
     Write-Host "Please ensure Docker Desktop is properly installed"
     exit 1
 }
-
-Write-Host "✅ Docker Compose available" -ForegroundColor Green
 Write-Host ""
 
 # Check if Docker daemon is running
