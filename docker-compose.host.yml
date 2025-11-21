@@ -4,8 +4,9 @@
 # 2. Execute CLI commands on the host (cmd, powershell, gemini-cli, etc.)
 # 3. Read/write files directly to the host filesystem
 # 4. Persist data on the host
-
-version: '3.8'
+#
+# Note: For host network mode on Linux, set DOCKER_NETWORK_MODE=host in .env
+# On Windows/macOS, host networking is not supported, use bridge mode (default)
 
 services:
   # Backend API Service with Host Access
@@ -14,9 +15,7 @@ services:
       context: ./backend
       dockerfile: Dockerfile.host
     container_name: package-audit-backend-host
-    # Use host network mode for direct host access (Linux only)
-    # For Windows/macOS, this will fall back to port mapping
-    network_mode: "${DOCKER_NETWORK_MODE:-bridge}"
+    # Note: When DOCKER_NETWORK_MODE=host, ports section is ignored
     ports:
       - "8000:8000"
     environment:
@@ -90,7 +89,6 @@ services:
       context: ./frontend
       dockerfile: Dockerfile
     container_name: package-audit-frontend-host
-    network_mode: "${DOCKER_NETWORK_MODE:-bridge}"
     ports:
       - "5173:5173"
     environment:
