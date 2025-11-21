@@ -2,30 +2,68 @@
 
 ## Overview
 
-Package Audit Dashboard can be run using Docker and Docker Compose for simplified development and deployment.
+Package Audit Dashboard can be run using Docker and Docker Compose in two modes:
 
-## ⚠️ Important: Docker vs Native Installation
+1. **Standard Mode** (`docker-compose.yml`) - Isolated container environment
+2. **Host Access Mode** (`docker-compose.host.yml`) - Container with full host system access ⭐ NEW!
 
-**Docker installation limitations:**
-- Docker containers are **isolated environments**
-- When running in Docker, the application can only audit and manage packages **inside the container**
-- Docker setup is ideal for **development, testing, and isolated environments**
+## 🚀 Docker Installation Modes
 
-**For auditing your host system's packages (npm, pip, brew, winget):**
-- Use **native installation** instead of Docker
-- Native installation allows the application to interact with your system's actual package managers
-- See the main [README.md](../README.md) for native installation options
+### Mode 1: Docker with Host Access (⭐ Recommended)
 
-**When to use Docker:**
-- ✅ Development and testing
-- ✅ Isolated environment testing
-- ✅ Learning and experimentation
-- ❌ NOT for auditing your real system's packages
+**Perfect for**: Auditing your actual host system from Docker with container isolation
 
-**When to use Native Installation:**
-- ✅ Auditing and managing your host system's packages
-- ✅ Production use on the actual system
-- ✅ Working with system package managers directly
+This mode gives you the best of both worlds:
+- ✅ Container isolation and easy management
+- ✅ Full access to host system packages (npm, pip, brew, winget)
+- ✅ Execute commands on host (PowerShell, CMD, bash)
+- ✅ Persistent data on host filesystem
+- ✅ Invoke CLI tools on host (gemini-cli, claude, codex, etc.)
+
+**Quick Start:**
+```bash
+# Linux/macOS/WSL
+./scripts/install-docker-host.sh
+
+# Windows (PowerShell)
+.\scripts\install-docker-host.ps1
+```
+
+**See [INSTALLATION.md](INSTALLATION.md) for complete setup guide.**
+
+### Mode 2: Docker Standard (Container Only)
+
+**Perfect for**: Testing, isolated development, learning
+
+- ✅ Complete isolation from host
+- ✅ No host system access
+- ✅ Only audits packages inside container
+- ❌ Cannot audit host system packages
+
+**When to use each mode:**
+
+| Feature | Host Access Mode | Standard Mode |
+|---------|-----------------|---------------|
+| Audit host packages | ✅ Yes | ❌ No |
+| Container isolation | ✅ Yes | ✅ Yes |
+| Host command execution | ✅ Yes | ❌ No |
+| CLI tools on host | ✅ Yes | ❌ No |
+| Windows support | ✅ Full | ⚠️ Limited |
+| Security consideration | ⚠️ High trust | ✅ Isolated |
+
+### Choosing the Right Mode
+
+**Use Host Access Mode if you want to:**
+- Audit and manage packages on your actual system
+- Execute commands on your host OS
+- Use CLI tools installed on your host
+- Access both Windows and Linux packages (WSL2)
+
+**Use Standard Mode if you want to:**
+- Test the application safely
+- Learn without affecting your system
+- Develop in complete isolation
+- Don't need host package management
 
 ## Prerequisites
 
@@ -39,7 +77,24 @@ Package Audit Dashboard can be run using Docker and Docker Compose for simplifie
 
 ## Quick Start
 
-### Development Mode (Recommended)
+### Host Access Mode (Recommended)
+
+```bash
+# Clone the repository
+git clone https://github.com/nsalvacao/Package_Audit_Dashboard.git
+cd Package_Audit_Dashboard
+
+# Linux/macOS/WSL: Run installation script
+./scripts/install-docker-host.sh
+
+# Windows: Run PowerShell script
+.\scripts\install-docker-host.ps1
+
+# Or manually start with host access
+docker-compose -f docker-compose.host.yml up -d
+```
+
+### Standard Mode (Container Only)
 
 ```bash
 # Clone the repository
@@ -47,20 +102,18 @@ git clone https://github.com/nsalvacao/Package_Audit_Dashboard.git
 cd Package_Audit_Dashboard
 
 # Start all services
-docker-compose up
-
-# Or run in background
 docker-compose up -d
 ```
 
 **Services will be available at:**
+- Frontend Dashboard: http://localhost:5173
 - Backend API: http://localhost:8000
 - API Documentation: http://localhost:8000/docs
-- Frontend Dashboard: http://localhost:5173
 - Health Check: http://localhost:8000/health
 
 ### Stop Services
 
+**Standard Mode:**
 ```bash
 # Stop services (keep data)
 docker-compose stop
@@ -71,6 +124,133 @@ docker-compose down
 # Stop, remove containers, and delete data
 docker-compose down -v
 ```
+
+**Host Access Mode:**
+```bash
+# Stop services (keep data)
+docker-compose -f docker-compose.host.yml stop
+
+# Stop and remove containers (keep data)
+docker-compose -f docker-compose.host.yml down
+
+# Stop, remove containers, and delete data
+docker-compose -f docker-compose.host.yml down -v
+```
+
+---
+
+## Host Access Features
+
+When using `docker-compose.host.yml`, the following features are enabled:
+
+### 1. Host Package Manager Access
+
+The container can interact with package managers installed on your host:
+
+```bash
+# From container, these access HOST packages
+docker-compose -f docker-compose.host.yml exec backend bash
+$ npm list -g         # Lists host npm packages
+$ pip list            # Lists host pip packages
+$ brew list           # Lists host brew packages (macOS/Linux)
+```
+
+### 2. Host Command Execution
+
+Execute commands on your host system from the container:
+
+```python
+# Via API
+POST /api/v1/host/execute
+{
+  "command": ["npm", "list", "-g"],
+  "shell": "bash"
+}
+```
+
+### 3. CLI Tool Integration
+
+Invoke AI coding assistants and other CLI tools on your host:
+
+```bash
+# If gemini-cli is installed on host
+POST /api/v1/host/cli-tool
+{
+  "tool": "gemini-cli",
+  "args": ["analyze", "code.py"]
+}
+
+# Supported tools (if installed):
+# - gemini-cli
+# - claude (Anthropic CLI)
+# - codex (OpenAI Codex)
+# - aider
+# - cursor
+# - Any custom CLI tool
+```
+
+### 4. Windows PowerShell/CMD Support
+
+Execute Windows commands from the container:
+
+```python
+# PowerShell
+POST /api/v1/host/execute
+{
+  "command": "Get-Package | Where-Object {$_.Name -like '*node*'}",
+  "shell": "powershell"
+}
+
+# CMD
+POST /api/v1/host/execute
+{
+  "command": "dir C:\\Windows\\System32",
+  "shell": "cmd"
+}
+```
+
+### 5. WSL2 Interoperability
+
+On WSL2, access both Windows and Linux:
+
+```bash
+# Linux packages
+docker-compose -f docker-compose.host.yml exec backend bash
+$ apt list --installed
+
+# Windows packages (via WSL interop)
+$ /mnt/c/Windows/System32/cmd.exe /c winget list
+```
+
+### 6. Persistent Data Storage
+
+Data is stored on the host filesystem:
+
+```bash
+# Default location: ./data
+# Configured in .env: HOST_DATA_DIR=./data
+
+# Access data from host
+ls -la ./data/
+
+# Snapshots stored here
+ls -la ./data/snapshots/
+```
+
+### Security Considerations
+
+⚠️ **Important**: Host access mode requires careful security considerations:
+
+1. **Review `.env.host` configuration** before enabling
+2. **Only enable privileged mode if absolutely necessary**
+3. **Monitor logs regularly** for suspicious activity
+4. **Limit volume mounts** to only necessary directories
+5. **Use non-root user** in container (configured in Dockerfile.host)
+6. **Audit command execution** with proper logging
+
+See [SECURITY.md](SECURITY.md) for complete security guidelines.
+
+---
 
 ## Docker Compose Configuration
 

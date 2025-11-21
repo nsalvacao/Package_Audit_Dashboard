@@ -42,6 +42,19 @@ Package Audit Dashboard is a full-stack application designed to audit, manage, a
 - **⏮️ Automatic Rollback** - Revert changes automatically
 - **📄 Lock File Export** - Download lock files for backup
 
+## 📚 Documentation
+
+**[Complete Documentation Index](README.md)**
+
+Quick access to documentation:
+- **[Installation Guide](guides/INSTALLATION.md)** - Get started with installation
+- **[Usage Guide](guides/USAGE.md)** - Learn how to use the application
+- **[Docker Host Access](deployment/DOCKER_HOST_ACCESS.md)** - Advanced Docker setup
+- **[API Reference](reference/API.md)** - API documentation
+- **[Security Guidelines](reference/SECURITY.md)** - Security best practices
+
+---
+
 ## 🚀 Quick Start
 
 ### Using Docker (Recommended)

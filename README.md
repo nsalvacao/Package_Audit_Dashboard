@@ -70,11 +70,46 @@ Click the badge at the top or use this button:
 
 ---
 
-### Option 2: Docker Setup (Isolated Environment)
+### Option 2: Docker Setup with Host Access (⭐ NEW!)
+
+**Perfect for**: Auditing your host system's packages from Docker with full isolation
+
+**✨ What's New**: Docker can now access and manage packages on your **actual host system**, not just inside the container!
+
+```bash
+# Clone the repository
+git clone https://github.com/nsalvacao/Package_Audit_Dashboard.git
+cd Package_Audit_Dashboard
+
+# Quick installation with host access (Linux/macOS/WSL)
+./scripts/install-docker-host.sh
+
+# Or for Windows (PowerShell)
+.\scripts\install-docker-host.ps1
+
+# Access the application
+# Frontend: http://localhost:5173
+# Backend API: http://localhost:8000
+# API Docs: http://localhost:8000/docs
+```
+
+**What you get with Docker + Host Access**:
+- ✅ Full access to host system packages (npm, pip, brew, winget)
+- ✅ Execute commands on host (PowerShell, CMD, bash)
+- ✅ Persistent data storage on host filesystem
+- ✅ Invoke CLI tools on host (gemini-cli, claude, codex, etc.)
+- ✅ Container isolation + host functionality
+- ✅ Works on Windows, macOS, Linux, and WSL2
+
+**📖 Full guide**: See **[docs/INSTALLATION.md](docs/INSTALLATION.md)** for detailed setup and **[docs/USAGE.md](docs/USAGE.md)** for usage instructions.
+
+---
+
+### Option 3: Docker Setup (Standard - Container Only)
 
 **Perfect for**: Testing, development, isolated environments
 
-**⚠️ Important Note**: Docker installation audits packages **inside the container** only. For auditing your host system's packages (npm, pip, brew, winget), use **Option 3 or 4** (native installation).
+**Note**: This option audits packages **inside the container** only. For host system access, use **Option 2** above.
 
 ```bash
 # Clone the repository
@@ -84,28 +119,15 @@ cd Package_Audit_Dashboard
 # Start all services with Docker Compose
 docker-compose up -d
 
-# Access the application
-# Frontend: http://localhost:5173
-# Backend API: http://localhost:8000
-# API Docs: http://localhost:8000/docs
-```
-
-**What you get with Docker**:
-- ✅ Isolated environment
-- ✅ No dependency installation on host
-- ✅ Quick setup with one command
-- ⚠️ Only audits container packages, not host system
-
-**To stop services**:
-```bash
+# To stop services
 docker-compose down
 ```
 
 ---
 
-### Option 3: Automated Local Setup (Native - Recommended for System Auditing)
+### Option 5: Automated Local Setup (Native)
 
-**Perfect for**: Auditing your actual system's installed packages (npm, pip, brew, winget)
+**Perfect for**: Direct native installation without Docker
 
 ```bash
 # Clone the repository
@@ -121,7 +143,7 @@ python3 scripts/quick_setup.py
 
 ---
 
-### Option 4: Manual Setup (Native)
+### Option 6: Manual Setup (Native)
 
 #### 1. Backend Setup
 
@@ -181,56 +203,59 @@ python -m cli.audit_cli --help
 
 ---
 
-## 📖 How to Use
+## 📖 Documentation
+
+**[📚 Complete Documentation Index](docs/README.md)**
+
+### Quick Links
+
+| Category | Documents |
+|----------|-----------|
+| **Getting Started** | [Installation Guide](docs/guides/INSTALLATION.md) • [Usage Guide](docs/guides/USAGE.md) • [Quick Start](#-quick-start) |
+| **Deployment** | [Docker Guide](docs/deployment/DOCKER.md) • [Docker Host Access](docs/deployment/DOCKER_HOST_ACCESS.md) • [Environment Setup](docs/deployment/ENV_SETUP.md) |
+| **Development** | [Architecture](docs/architecture/BLUEPRINT_FINAL.md) • [API Reference](docs/reference/API.md) • [Contributing](CONTRIBUTING.md) |
+| **Reference** | [Security](docs/reference/SECURITY.md) • [Limitations](docs/reference/LIMITATIONS.md) • [Commands](docs/reference/Comandos_por_gestor_de_pacotes.md) |
+
+### Essential Guides
+
+- 🚀 **[Installation Guide](docs/guides/INSTALLATION.md)** - Complete installation for all platforms
+- 📖 **[Usage Guide](docs/guides/USAGE.md)** - Comprehensive usage instructions with examples
+- 🐳 **[Docker with Host Access](docs/deployment/DOCKER_HOST_ACCESS.md)** - Advanced Docker configuration
+- 🔒 **[Security Guidelines](docs/reference/SECURITY.md)** - Security best practices
+- 🏗️ **[Architecture Blueprint](docs/architecture/BLUEPRINT_FINAL.md)** - System design and architecture
+
+---
+
+## 📖 Quick Usage Guide
 
 After installation, access the dashboard at **http://localhost:5173** (frontend) with the backend running at **http://localhost:8000**.
 
 ### Basic Workflow
 
-1. **Select a Package Manager**
-   - The Overview tab auto-detects installed managers (npm, pip, brew, winget)
-   - Click on any manager card to select it
-   - Your selection persists across sessions
-
-2. **View Installed Packages**
-   - Navigate to the **Packages** tab
-   - Search and filter packages by name
-   - View package versions and details
-
-3. **Uninstall Packages**
-   - **Single uninstall**: Click "Uninstall" button next to any package
-   - **Batch uninstall**: Go to Operations tab, enter package names (one per line)
-   - All uninstalls automatically create snapshots for rollback
-
-4. **Security Audits**
-   - Go to the **Security** tab
-   - Click "Scan Vulnerabilities" to audit installed packages
-   - View results with severity levels (critical/high/medium/low)
-
-5. **Advanced Features**
-   - **Export lockfiles**: Download requirements.txt or package-lock.json
-   - **Dependency trees**: Visualize package dependencies
-   - **Rollback**: Restore previous states using snapshots
+1. **Select a Package Manager** → Auto-detects npm, pip, brew, winget
+2. **View Packages** → Search and filter installed packages
+3. **Uninstall Safely** → Automatic snapshots before removal
+4. **Security Audits** → Scan for vulnerabilities
+5. **Batch Operations** → Manage multiple packages at once
+6. **Rollback** → Restore previous states
 
 ### Common Use Cases
 
 ```bash
-# Use Case 1: Clean up unused packages
-1. Select manager → Packages tab → Search package → Uninstall
-2. System creates snapshot → Package removed → Snapshot ID returned
+# Clean up unused packages
+Select manager → Packages → Search → Uninstall (with auto-snapshot)
 
-# Use Case 2: Security audit
-1. Select manager → Security tab → Scan Vulnerabilities
-2. Review critical/high severity issues → Plan remediation
+# Security audit
+Security tab → Scan Vulnerabilities → Review issues
 
-# Use Case 3: Batch cleanup
-1. Select manager → Operations tab → Enter package list
-2. Click "Batch Uninstall" → Review results
+# Batch operations
+Operations tab → Batch Uninstall → Enter package list
 
-# Use Case 4: Safe experimentation
-1. Install test packages → Try functionality
-2. Operations tab → Rollback → Select snapshot → Restore
+# Safe experimentation
+Create snapshot → Make changes → Rollback if needed
 ```
+
+**For complete usage instructions, see [docs/guides/USAGE.md](docs/guides/USAGE.md)**
 
 ### CLI Usage (Optional)
 
@@ -279,18 +304,41 @@ package-audit-dashboard/
 │   │   └── __main__.py        # Entry point
 │   └── setup.py               # CLI installation
 │
-├── docs/                       # Documentation
-│   ├── SECURITY.md            # Security architecture
-│   ├── LIMITATIONS.md         # Known limitations
-│   ├── SETUP_PATH.md          # PATH configuration guide
-│   └── API.md                 # API documentation
+├── docs/                       # Professional documentation
+│   ├── guides/                # User guides
+│   │   ├── INSTALLATION.md    # Installation guide
+│   │   ├── USAGE.md           # Usage instructions
+│   │   ├── SETUP_PATH.md      # PATH configuration
+│   │   ├── CODESPACES.md      # GitHub Codespaces guide
+│   │   └── COPILOT_GUIDE.md   # GitHub Copilot integration
+│   ├── deployment/            # Deployment guides
+│   │   ├── DOCKER.md          # Docker deployment
+│   │   ├── DOCKER_HOST_ACCESS.md  # Docker host access
+│   │   ├── ENV_SETUP.md       # Environment setup
+│   │   └── CODESPACES_SETUP.md    # Codespaces deployment
+│   ├── reference/             # Technical reference
+│   │   ├── API.md             # API documentation
+│   │   ├── SECURITY.md        # Security guidelines
+│   │   ├── LIMITATIONS.md     # Known limitations
+│   │   └── OPTIONAL_DEPENDENCIES.md
+│   ├── architecture/          # System architecture
+│   │   └── BLUEPRINT_FINAL.md # Architecture blueprint
+│   ├── development/           # Development docs
+│   │   ├── FASE1_BREAKDOWN.md # Phase 1 breakdown
+│   │   ├── CHANGELOG_PHASE2.md    # Phase 2 changes
+│   │   └── LOG.md             # Development log
+│   └── README.md              # Documentation index
 │
-├── scripts/                    # Setup scripts
-│   ├── quick_setup.sh         # Automated setup (Unix)
-│   ├── quick_setup.py         # Automated setup (cross-platform)
-│   └── chroma_sync.py         # ChromaDB synchronization
+├── scripts/                    # Automation scripts
+│   ├── install-docker-host.sh # Docker host setup (Unix)
+│   ├── install-docker-host.ps1    # Docker host setup (Windows)
+│   ├── test-docker-host.sh    # Configuration tests
+│   ├── quick_setup.sh         # Native setup (Unix)
+│   └── quick_setup.py         # Native setup (cross-platform)
 │
-├── BLUEPRINT_FINAL.md          # Complete project blueprint
-├── FASE1_BREAKDOWN.md          # Phase 1 task breakdown
-└── LOG.md                      # Development log
+├── docker-compose.yml         # Standard Docker Compose
+├── docker-compose.host.yml    # Docker with host access
+├── .env.example               # Environment template
+├── .env.host                  # Host access template
+└── CONTRIBUTING.md            # Contribution guidelines
 ```

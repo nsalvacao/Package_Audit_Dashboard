@@ -1,0 +1,120 @@
+# Docker Compose configuration with HOST ACCESS
+# This configuration allows the containerized application to:
+# 1. Access and manage packages on the HOST system
+# 2. Execute CLI commands on the host (cmd, powershell, gemini-cli, etc.)
+# 3. Read/write files directly to the host filesystem
+# 4. Persist data on the host
+#
+# Note: For host network mode on Linux, set DOCKER_NETWORK_MODE=host in .env
+# On Windows/macOS, host networking is not supported, use bridge mode (default)
+
+services:
+  # Backend API Service with Host Access
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.host
+    container_name: package-audit-backend-host
+    # Note: When DOCKER_NETWORK_MODE=host, ports section is ignored
+    ports:
+      - "8000:8000"
+    environment:
+      - API_HOST=0.0.0.0
+      - API_PORT=8000
+      - API_RELOAD=true
+      - CORS_ORIGINS=http://localhost:5173,http://127.0.0.1:5173
+      - LOG_LEVEL=INFO
+      - DEBUG=false
+      - DATA_DIR=/host/data
+      - SNAPSHOT_RETENTION=10
+      - LOCK_TIMEOUT=30
+      - STALE_LOCK_TIMEOUT=300
+      - COMMAND_TIMEOUT=60
+      - HOST_EXECUTION_MODE=${HOST_EXECUTION_MODE:-docker}
+      - ENABLE_HOST_ACCESS=true
+      # Windows-specific
+      - WINDOWS_USER_PROFILE=${USERPROFILE:-}
+      - WINDOWS_PROGRAMFILES=${PROGRAMFILES:-}
+      - WINDOWS_SYSTEM32=${SYSTEMROOT:-}/System32
+    volumes:
+      # Application code (development)
+      - ./backend:/app
+      
+      # Host data directory for persistence
+      - ${HOST_DATA_DIR:-./data}:/host/data
+      
+      # Host package manager directories (Linux/macOS/WSL)
+      - ${HOME}/.npm:/host/.npm:ro
+      - ${HOME}/.config:/host/.config:ro
+      - /usr/local:/host/usr/local:ro
+      - /usr/bin:/host/usr/bin:ro
+      
+      # Docker socket for container-to-host communication
+      - /var/run/docker.sock:/var/run/docker.sock
+      
+      # WSL2-specific mounts (will be ignored if not on WSL)
+      - /mnt/c:/host/mnt/c:ro
+      - /mnt/d:/host/mnt/d:ro
+      
+      # SSH access for remote command execution
+      - ${HOME}/.ssh:/host/.ssh:ro
+      
+      # Host temporary directory
+      - /tmp:/host/tmp
+    
+    # ⚠️ SECURITY WARNING: Privileged mode grants extensive host access
+    # Only enable if absolutely necessary for your use case
+    # Default is false for security. Set DOCKER_PRIVILEGED=true in .env to enable
+    privileged: ${DOCKER_PRIVILEGED:-false}
+    
+    # Additional capabilities for host operations
+    cap_add:
+      - SYS_ADMIN
+      - NET_ADMIN
+    
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+    restart: unless-stopped
+    
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    
+    networks:
+      - package-audit-network
+
+  # Frontend Web Dashboard
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: package-audit-frontend-host
+    ports:
+      - "5173:5173"
+    environment:
+      - VITE_API_URL=http://localhost:8000
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    command: npm run dev -- --host 0.0.0.0
+    restart: unless-stopped
+    depends_on:
+      - backend
+    networks:
+      - package-audit-network
+
+volumes:
+  # Named volumes are not needed as we're using host directories
+  package-audit-host-data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ${HOST_DATA_DIR:-./data}
+
+networks:
+  package-audit-network:
+    driver: bridge
+    name: package-audit-network

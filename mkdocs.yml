@@ -83,19 +83,30 @@ plugins:
 
 nav:
   - Home: index.md
-  - Getting Started:
-      - Codespaces Setup: CODESPACES.md
-      - Copilot Guide: COPILOT_GUIDE.md
-      - PATH Setup: SETUP_PATH.md
-      - Optional Dependencies: OPTIONAL_DEPENDENCIES.md
+  - User Guides:
+      - Installation: guides/INSTALLATION.md
+      - Usage: guides/USAGE.md
+      - PATH Setup: guides/SETUP_PATH.md
+      - Codespaces: guides/CODESPACES.md
+      - Copilot Integration: guides/COPILOT_GUIDE.md
   - Deployment:
-      - Docker: DOCKER.md
-      - Environment Setup: ENV_SETUP.md
-  - API Reference:
-      - API Documentation: API.md
+      - Docker Standard: deployment/DOCKER.md
+      - Docker Host Access: deployment/DOCKER_HOST_ACCESS.md
+      - Environment Setup: deployment/ENV_SETUP.md
+      - Codespaces Setup: deployment/CODESPACES_SETUP.md
+  - Reference:
+      - API Documentation: reference/API.md
+      - Security Guidelines: reference/SECURITY.md
+      - Limitations: reference/LIMITATIONS.md
+      - Optional Dependencies: reference/OPTIONAL_DEPENDENCIES.md
+      - Command Reference: reference/Comandos_por_gestor_de_pacotes.md
+  - Architecture:
+      - System Blueprint: architecture/BLUEPRINT_FINAL.md
   - Development:
-      - Security: SECURITY.md
-      - Limitations: LIMITATIONS.md
+      - Phase 1 Breakdown: development/FASE1_BREAKDOWN.md
+      - Phase 2 Changelog: development/CHANGELOG_PHASE2.md
+      - Development Log: development/LOG.md
+      - Language Support: development/LANG.md
 
 extra:
   social:
