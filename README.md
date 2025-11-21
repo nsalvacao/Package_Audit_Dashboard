@@ -205,27 +205,24 @@ python -m cli.audit_cli --help
 
 ## 📖 Documentation
 
-Comprehensive documentation is available for installation, usage, and advanced features:
+**[📚 Complete Documentation Index](docs/README.md)**
 
-- **[Installation Guide](docs/INSTALLATION.md)** - Complete installation instructions for all platforms
-  - Docker with host access (Windows/macOS/Linux/WSL2)
-  - Native installation (Windows/macOS/Linux)
-  - WSL2 setup and configuration
-  - Troubleshooting and post-installation setup
+### Quick Links
 
-- **[Usage Guide](docs/USAGE.md)** - Detailed usage instructions
-  - Web dashboard walkthrough
-  - CLI commands and examples
-  - API usage and examples
-  - Docker host access features
-  - Advanced features and workflows
-  - Best practices and troubleshooting
+| Category | Documents |
+|----------|-----------|
+| **Getting Started** | [Installation Guide](docs/guides/INSTALLATION.md) • [Usage Guide](docs/guides/USAGE.md) • [Quick Start](#-quick-start) |
+| **Deployment** | [Docker Guide](docs/deployment/DOCKER.md) • [Docker Host Access](docs/deployment/DOCKER_HOST_ACCESS.md) • [Environment Setup](docs/deployment/ENV_SETUP.md) |
+| **Development** | [Architecture](docs/architecture/BLUEPRINT_FINAL.md) • [API Reference](docs/reference/API.md) • [Contributing](CONTRIBUTING.md) |
+| **Reference** | [Security](docs/reference/SECURITY.md) • [Limitations](docs/reference/LIMITATIONS.md) • [Commands](docs/reference/Comandos_por_gestor_de_pacotes.md) |
 
-- **[Docker Guide](docs/DOCKER.md)** - Docker-specific documentation
-- **[Security Guidelines](docs/SECURITY.md)** - Security best practices
-- **[API Documentation](docs/API.md)** - REST API reference
-- **[Codespaces Guide](docs/CODESPACES.md)** - GitHub Codespaces usage
-- **[Limitations](docs/LIMITATIONS.md)** - Known limitations and workarounds
+### Essential Guides
+
+- 🚀 **[Installation Guide](docs/guides/INSTALLATION.md)** - Complete installation for all platforms
+- 📖 **[Usage Guide](docs/guides/USAGE.md)** - Comprehensive usage instructions with examples
+- 🐳 **[Docker with Host Access](docs/deployment/DOCKER_HOST_ACCESS.md)** - Advanced Docker configuration
+- 🔒 **[Security Guidelines](docs/reference/SECURITY.md)** - Security best practices
+- 🏗️ **[Architecture Blueprint](docs/architecture/BLUEPRINT_FINAL.md)** - System design and architecture
 
 ---
 
@@ -258,7 +255,7 @@ Operations tab → Batch Uninstall → Enter package list
 Create snapshot → Make changes → Rollback if needed
 ```
 
-**For complete usage instructions, see [docs/USAGE.md](docs/USAGE.md)**
+**For complete usage instructions, see [docs/guides/USAGE.md](docs/guides/USAGE.md)**
 
 ### CLI Usage (Optional)
 
@@ -307,18 +304,41 @@ package-audit-dashboard/
 │   │   └── __main__.py        # Entry point
 │   └── setup.py               # CLI installation
 │
-├── docs/                       # Documentation
-│   ├── SECURITY.md            # Security architecture
-│   ├── LIMITATIONS.md         # Known limitations
-│   ├── SETUP_PATH.md          # PATH configuration guide
-│   └── API.md                 # API documentation
+├── docs/                       # Professional documentation
+│   ├── guides/                # User guides
+│   │   ├── INSTALLATION.md    # Installation guide
+│   │   ├── USAGE.md           # Usage instructions
+│   │   ├── SETUP_PATH.md      # PATH configuration
+│   │   ├── CODESPACES.md      # GitHub Codespaces guide
+│   │   └── COPILOT_GUIDE.md   # GitHub Copilot integration
+│   ├── deployment/            # Deployment guides
+│   │   ├── DOCKER.md          # Docker deployment
+│   │   ├── DOCKER_HOST_ACCESS.md  # Docker host access
+│   │   ├── ENV_SETUP.md       # Environment setup
+│   │   └── CODESPACES_SETUP.md    # Codespaces deployment
+│   ├── reference/             # Technical reference
+│   │   ├── API.md             # API documentation
+│   │   ├── SECURITY.md        # Security guidelines
+│   │   ├── LIMITATIONS.md     # Known limitations
+│   │   └── OPTIONAL_DEPENDENCIES.md
+│   ├── architecture/          # System architecture
+│   │   └── BLUEPRINT_FINAL.md # Architecture blueprint
+│   ├── development/           # Development docs
+│   │   ├── FASE1_BREAKDOWN.md # Phase 1 breakdown
+│   │   ├── CHANGELOG_PHASE2.md    # Phase 2 changes
+│   │   └── LOG.md             # Development log
+│   └── README.md              # Documentation index
 │
-├── scripts/                    # Setup scripts
-│   ├── quick_setup.sh         # Automated setup (Unix)
-│   ├── quick_setup.py         # Automated setup (cross-platform)
-│   └── chroma_sync.py         # ChromaDB synchronization
+├── scripts/                    # Automation scripts
+│   ├── install-docker-host.sh # Docker host setup (Unix)
+│   ├── install-docker-host.ps1    # Docker host setup (Windows)
+│   ├── test-docker-host.sh    # Configuration tests
+│   ├── quick_setup.sh         # Native setup (Unix)
+│   └── quick_setup.py         # Native setup (cross-platform)
 │
-├── BLUEPRINT_FINAL.md          # Complete project blueprint
-├── FASE1_BREAKDOWN.md          # Phase 1 task breakdown
-└── LOG.md                      # Development log
+├── docker-compose.yml         # Standard Docker Compose
+├── docker-compose.host.yml    # Docker with host access
+├── .env.example               # Environment template
+├── .env.host                  # Host access template
+└── CONTRIBUTING.md            # Contribution guidelines
 ```

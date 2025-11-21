@@ -153,7 +153,7 @@ docker-compose -f docker-compose.host.yml ps
 2. Only enable privileged mode if absolutely necessary
 3. Keep Docker Desktop updated
 4. Review logs regularly: `docker-compose -f docker-compose.host.yml logs`
-5. See [SECURITY.md](SECURITY.md) for detailed security guidelines
+5. See [SECURITY.md](../reference/SECURITY.md) for detailed security guidelines
 
 ### Useful Commands
 
@@ -620,7 +620,7 @@ After installation:
 1. Read the [Usage Guide](USAGE.md) to learn how to use the application
 2. Review [Security Guidelines](SECURITY.md) for best practices
 3. Check [API Documentation](API.md) for API details
-4. See [DOCKER.md](DOCKER.md) for advanced Docker configurations
+4. See [DOCKER.md](../deployment/DOCKER.md) for advanced Docker configurations
 
 ---
 

@@ -369,7 +369,7 @@ http://localhost:8000/api/v1
 
 ### Authentication
 
-Currently, no authentication is required. For production use, implement authentication as described in [SECURITY.md](SECURITY.md).
+Currently, no authentication is required. For production use, implement authentication as described in [SECURITY.md](../reference/SECURITY.md).
 
 ### Common Endpoints
 
@@ -880,10 +880,10 @@ sudo usermod -aG docker $USER
 
 ## Next Steps
 
-- Review [API Documentation](API.md) for detailed API reference
-- Check [Security Guidelines](SECURITY.md) for hardening
-- See [Docker Guide](DOCKER.md) for advanced Docker usage
-- Read [Limitations](LIMITATIONS.md) for known issues
+- Review [API Documentation](../reference/API.md) for detailed API reference
+- Check [Security Guidelines](../reference/SECURITY.md) for hardening
+- See [Docker Guide](../deployment/DOCKER.md) for advanced Docker usage
+- Read [Limitations](../reference/LIMITATIONS.md) for known issues
 
 ---
 
