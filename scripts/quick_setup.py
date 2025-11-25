@@ -53,7 +53,7 @@ def check_python_version() -> bool:
 
 def setup_backend() -> bool:
     """Setup backend environment and dependencies."""
-    print_header("🔧 Setting up Backend")
+    print_header("Setting up Backend")
 
     backend_dir = Path("backend")
     if not backend_dir.exists():
@@ -89,7 +89,7 @@ def setup_backend() -> bool:
     print_success("Dependencies installed")
 
     # Run tests
-    print("\n🧪 Running tests...")
+    print("\nRunning tests...")
     try:
         result = subprocess.run(
             [str(python_exec), "-m", "pytest", "tests/", "-v", "--tb=short"],
@@ -125,7 +125,7 @@ def check_node() -> bool:
 
 def setup_frontend() -> bool:
     """Setup frontend if Node.js is available."""
-    print_header("🔧 Setting up Frontend")
+    print_header("Setting up Frontend")
 
     frontend_dir = Path("frontend")
     if not frontend_dir.exists():
@@ -151,7 +151,7 @@ def setup_frontend() -> bool:
 
 def create_directories() -> None:
     """Create necessary application directories."""
-    print_header("📁 Creating necessary directories")
+    print_header("Creating necessary directories")
 
     home = Path.home()
     base_dir = home / ".package-audit"
