@@ -6,6 +6,9 @@ import subprocess
 import sys
 from pathlib import Path
 
+# Garantir UTF-8 em consoles Windows (evita UnicodeEncodeError com emojis)
+os.environ.setdefault("PYTHONUTF8", "1")
+
 
 class Colors:
     """ANSI color codes."""
