@@ -99,7 +99,7 @@ class NpmAdapter(BaseAdapter):
     def get_dependency_tree(self, package: Optional[str] = None) -> Dict[str, Any]:
         """Obtém árvore de dependências usando npm list."""
         try:
-            args = ["list", "-g", "--json"]
+            args = ["list", "-g", "--json", "--depth", "3"]
             if package:
                 sanitized = self._sanitize_package(package)
                 args.append(sanitized)
@@ -110,22 +110,14 @@ class NpmAdapter(BaseAdapter):
                 check=False,
             )
 
-            if result.returncode != 0:
+            if result.returncode == 0 and result.stdout:
+                data = json.loads(result.stdout)
                 return {
                     "manager": self.manager_id,
                     "package": package,
-                    "tree": {},
+                    "tree": data,
                     "supported": True,
-                    "error": result.stderr,
                 }
-
-            data = json.loads(result.stdout)
-            return {
-                "manager": self.manager_id,
-                "package": package,
-                "tree": data.get("dependencies", {}),
-                "supported": True,
-            }
         except (CommandExecutionError, json.JSONDecodeError) as exc:
             logger.error("Failed to get dependency tree: %s", exc)
             return {
@@ -181,7 +173,7 @@ class NpmAdapter(BaseAdapter):
         try:
             # npm list --json já fornece informação similar ao lockfile
             result = self.command_executor.run(
-                [self.executable_name, "list", "-g", "--json"],
+                [self.executable_name, "list", "-g", "--json", "--depth", "3"],
                 timeout=self.command_timeout,
                 check=False,
             )

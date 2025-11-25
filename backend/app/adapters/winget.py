@@ -104,3 +104,52 @@ class WinGetAdapter(BaseAdapter):
             "generated_at": datetime.now(timezone.utc).isoformat(),
             "packages": packages,
         }
+
+    def get_dependency_tree(self, package: str | None = None) -> Dict[str, Any]:
+        """Winget não expõe dependências; devolve árvore plana das instalações."""
+        packages = self.list_packages()
+        return {
+            "manager": self.manager_id,
+            "package": package,
+            "tree": {"packages": packages},
+            "supported": True,
+            "note": "Winget não fornece árvore de dependências; lista plana retornada.",
+        }
+
+    def export_lockfile(self) -> Dict[str, Any]:
+        """Exporta manifest via winget export."""
+        try:
+            result = self.command_executor.run(
+                [
+                    self.executable_name,
+                    "export",
+                    "--output",
+                    "-",
+                    "--accept-source-agreements",
+                    "--accept-package-agreements",
+                    "--disable-interactivity",
+                    "--json",
+                ],
+                timeout=self.command_timeout,
+                check=False,
+            )
+            if result.returncode == 0 and result.stdout:
+                try:
+                    data = json.loads(result.stdout)
+                except json.JSONDecodeError:
+                    data = {"raw": result.stdout}
+                return {
+                    "manager": self.manager_id,
+                    "lockfile": data,
+                    "supported": True,
+                    "format": "winget-export.json",
+                }
+        except CommandExecutionError as exc:
+            logger.error("Failed to export winget lockfile: %s", exc)
+
+        return {
+            "manager": self.manager_id,
+            "lockfile": {},
+            "supported": True,
+            "error": "Failed to export winget lockfile",
+        }

@@ -7,6 +7,8 @@ from .base import BaseAdapter
 from .brew import BrewAdapter
 from .npm import NpmAdapter
 from .pip import PipAdapter
+from .pipx import PipxAdapter
+from .pnpm import PnpmAdapter
 from .winget import WinGetAdapter
 
 REGISTERED_ADAPTERS: List[Type[BaseAdapter]] = [
@@ -14,6 +16,8 @@ REGISTERED_ADAPTERS: List[Type[BaseAdapter]] = [
     PipAdapter,
     WinGetAdapter,
     BrewAdapter,
+    PipxAdapter,
+    PnpmAdapter,
 ]
 
 
