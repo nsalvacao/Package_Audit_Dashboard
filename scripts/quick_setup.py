@@ -176,7 +176,7 @@ def print_next_steps() -> None:
     """Print next steps for the user."""
     print("\n" + "=" * 50)
     print_success("Setup completed successfully!")
-    print("\n📝 Next steps:\n")
+    print("\nNext steps:\n")
 
     if platform.system() == "Windows":
         activate_cmd = ".\\.venv\\Scripts\\activate"
