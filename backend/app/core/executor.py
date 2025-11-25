@@ -3,6 +3,8 @@ from __future__ import annotations
 
 import asyncio
 import logging
+import os
+import shutil
 import subprocess
 from typing import List, Optional, Tuple
 
@@ -24,6 +26,24 @@ class CommandExecutor:
     DEFAULT_TIMEOUT = 30
 
     @staticmethod
+    def _resolve_executable(executable: str) -> Optional[str]:
+        """Resolve path do executável, adicionando caminhos padrão do Node no Windows."""
+        resolved = shutil.which(executable)
+        if resolved:
+            return resolved
+
+        if os.name == "nt" and executable in {"npm", "node", "npx"}:
+            candidates = [
+                r"C:\Program Files\nodejs",
+                os.path.join(os.environ.get("LOCALAPPDATA", ""), "Programs", "nodejs"),
+            ]
+            for base in candidates:
+                candidate_path = os.path.join(base, executable + (".cmd" if executable != "node" else ".exe"))
+                if os.path.exists(candidate_path):
+                    return candidate_path
+        return None
+
+    @staticmethod
     def run(
         command: List[str],
         timeout: Optional[int] = None,
@@ -34,6 +54,10 @@ class CommandExecutor:
             raise TypeError("Command must be provided as a list.")
 
         timeout = timeout or CommandExecutor.DEFAULT_TIMEOUT
+        resolved_exec = CommandExecutor._resolve_executable(command[0])
+        if resolved_exec:
+            command = [resolved_exec, *command[1:]]
+
         logger.info("Executing command: %s", " ".join(command))
 
         try:
@@ -68,6 +92,10 @@ class CommandExecutor:
             raise TypeError("Command must be provided as a list.")
 
         timeout = timeout or CommandExecutor.DEFAULT_TIMEOUT
+        resolved_exec = CommandExecutor._resolve_executable(command[0])
+        if resolved_exec:
+            command = [resolved_exec, *command[1:]]
+
         logger.info("Executing async command: %s", " ".join(command))
 
         process = await asyncio.create_subprocess_exec(
