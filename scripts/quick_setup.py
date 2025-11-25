@@ -76,13 +76,13 @@ def setup_backend() -> bool:
         python_exec = venv_dir / "bin" / "python"
         pip_exec = venv_dir / "bin" / "pip"
 
-    # Upgrade pip
+    # Upgrade pip (use python -m pip to avoid self-upgrade lock on Windows)
     print("Upgrading pip...")
-    subprocess.run([str(pip_exec), "install", "--upgrade", "pip"], check=True)
+    subprocess.run([str(python_exec), "-m", "pip", "install", "--upgrade", "pip"], check=True)
 
     # Install requirements
     print("Installing dependencies...")
-    subprocess.run([str(pip_exec), "install", "-r", "requirements.txt"], check=True)
+    subprocess.run([str(python_exec), "-m", "pip", "install", "-r", "requirements.txt"], check=True)
     print_success("Dependencies installed")
 
     # Run tests
