@@ -28,17 +28,17 @@ def print_header(message: str) -> None:
 
 def print_success(message: str) -> None:
     """Print a success message."""
-    print(f"{Colors.GREEN}✓ {message}{Colors.NC}")
+    print(f"{Colors.GREEN}[OK] {message}{Colors.NC}")
 
 
 def print_warning(message: str) -> None:
     """Print a warning message."""
-    print(f"{Colors.YELLOW}⚠ {message}{Colors.NC}")
+    print(f"{Colors.YELLOW}[WARN] {message}{Colors.NC}")
 
 
 def print_error(message: str) -> None:
     """Print an error message."""
-    print(f"{Colors.RED}❌ {message}{Colors.NC}")
+    print(f"{Colors.RED}[ERROR] {message}{Colors.NC}")
 
 
 def check_python_version() -> bool:
@@ -214,7 +214,7 @@ def ensure_node_in_path() -> None:
 
 def main() -> int:
     """Main setup function."""
-    print_header("🚀 Package Audit Dashboard - Quick Setup")
+    print_header("Package Audit Dashboard - Quick Setup")
 
     ensure_node_in_path()
 
