@@ -112,7 +112,10 @@ def check_node() -> bool:
     """Check if Node.js is installed."""
     try:
         result = subprocess.run(
-            ["node", "--version"], capture_output=True, text=True, check=True
+            [resolve_executable("node"), "--version"],
+            capture_output=True,
+            text=True,
+            check=True,
         )
         version = result.stdout.strip()
         print_success(f"Node.js {version} found")
@@ -140,7 +143,7 @@ def setup_frontend() -> bool:
     node_modules = Path("node_modules")
     if not node_modules.exists():
         print("Installing npm dependencies...")
-        subprocess.run(["npm", "install"], check=True)
+        subprocess.run([resolve_executable("npm"), "install"], check=True)
         print_success("Frontend dependencies installed")
     else:
         print_warning("Frontend dependencies already installed")
@@ -210,6 +213,27 @@ def ensure_node_in_path() -> None:
 
     if to_prepend:
         os.environ["PATH"] = os.pathsep.join(to_prepend + [current_path])
+
+
+def resolve_executable(name: str) -> str:
+    """Resolve path para executáveis frequentes (node/npm)."""
+    import shutil
+
+    found = shutil.which(name)
+    if found:
+        return found
+
+    if platform.system() == "Windows" and name in {"node", "npm", "npx"}:
+        candidates = [
+            Path(r"C:\Program Files\nodejs") / f"{name}.cmd",
+            Path.home() / "AppData" / "Local" / "Programs" / "nodejs" / f"{name}.cmd",
+            Path(r"C:\Program Files\nodejs") / f"{name}.exe",
+        ]
+        for cand in candidates:
+            if cand.exists():
+                return str(cand)
+
+    return name
 
 
 def main() -> int:
