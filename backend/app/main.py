@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import os
 import time
+from contextlib import asynccontextmanager
 from typing import Callable
 
 from fastapi import FastAPI, Request, Response
@@ -27,11 +28,27 @@ setup_logging(
 logger = get_logger(__name__)
 
 
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    """Lifecycle handler to log startup/shutdown."""
+    logger.info(
+        "Package Audit Dashboard API starting",
+        version="0.2.0",
+        log_level=LOG_LEVEL,
+        json_logs=JSON_LOGS,
+    )
+    try:
+        yield
+    finally:
+        logger.info("Package Audit Dashboard API shutting down")
+
+
 def create_app() -> FastAPI:
     app = FastAPI(
         title="Package Audit Dashboard API",
         version="0.2.0",
         description="API para descoberta e gestão de gestores de pacotes com funcionalidades avançadas.",
+        lifespan=lifespan,
     )
 
     # Rate limiting middleware (first to reject quickly)
@@ -70,23 +87,6 @@ def create_app() -> FastAPI:
         allow_methods=["*"],
         allow_headers=["*"],
     )
-
-    # Startup event
-    @app.on_event("startup")
-    async def startup_event():
-        """Log application startup."""
-        logger.info(
-            "Package Audit Dashboard API starting",
-            version="0.2.0",
-            log_level=LOG_LEVEL,
-            json_logs=JSON_LOGS,
-        )
-
-    # Shutdown event
-    @app.on_event("shutdown")
-    async def shutdown_event():
-        """Log application shutdown."""
-        logger.info("Package Audit Dashboard API shutting down")
 
     # Health check endpoints (no /api prefix for standard health checks)
     app.include_router(health.router)
