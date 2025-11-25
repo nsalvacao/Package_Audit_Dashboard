@@ -189,9 +189,31 @@ def print_next_steps() -> None:
     print()
 
 
+def ensure_node_in_path() -> None:
+    """Guarantee Node.js binaries are reachable on Windows PATH."""
+    if platform.system() != "Windows":
+        return
+
+    candidate_paths = [
+        Path(r"C:\Program Files\nodejs"),
+        Path.home() / "AppData" / "Local" / "Programs" / "nodejs",
+    ]
+
+    current_path = os.environ.get("PATH", "")
+    to_prepend: list[str] = []
+    for path in candidate_paths:
+        if path.exists() and str(path) not in current_path:
+            to_prepend.append(str(path))
+
+    if to_prepend:
+        os.environ["PATH"] = os.pathsep.join(to_prepend + [current_path])
+
+
 def main() -> int:
     """Main setup function."""
     print_header("🚀 Package Audit Dashboard - Quick Setup")
+
+    ensure_node_in_path()
 
     # Check Python version
     if not check_python_version():
