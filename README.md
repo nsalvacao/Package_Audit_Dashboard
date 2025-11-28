@@ -16,6 +16,37 @@ Local dashboard (plus CLI companion) for auditing, managing, and maintaining pac
 
 ---
 
+## 🎯 Problem Statement
+
+### The Challenge
+
+As developers, we accumulate **dozens of package managers** and **hundreds of CLI tools** across Windows, macOS, Linux, and WSL environments:
+
+- **Package Managers**: npm, pnpm, yarn, pip, pipx, uv, poetry, winget, choco, scoop, apt, brew, cargo, gem...
+- **Installed Tools**: Spread across multiple managers, often duplicated
+- **Direct Installations**: CLIs downloaded as executables, outside package managers
+
+### The Core Questions
+
+This dashboard answers 3 fundamental questions:
+
+1. **What package managers do I have installed?** (across all environments)
+2. **What CLI tools are installed through each manager?**
+3. **What tools did I install directly, outside package managers?**
+
+### Why This Matters
+
+Without centralized visibility:
+- ❌ **Duplicate tools** (same CLI via npm, pipx, and direct install)
+- ❌ **Version conflicts** between managers
+- ❌ **Wasted disk space** (GBs of unused dependencies)
+- ❌ **Security blind spots** (forgotten tools with vulnerabilities)
+- ❌ **Environment reproducibility** is nearly impossible
+
+**Package Audit Dashboard** gives you complete visibility and control.
+
+---
+
 ## ✨ Features
 
 ### Phase 1 (MVP) — Completed

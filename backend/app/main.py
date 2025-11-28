@@ -6,17 +6,24 @@ import time
 from contextlib import asynccontextmanager
 from typing import Callable
 
+from dotenv import load_dotenv
 from fastapi import FastAPI, Request, Response
 from fastapi.middleware.cors import CORSMiddleware
 
+from app.core.enhanced_logging import DetailedLoggingMiddleware
 from app.core.logging import get_logger, log_request, setup_logging
 from app.core.rate_limiter import rate_limit_middleware
 from app.routers import advanced, discover, health, managers, packages, streaming
+
+# Load environment variables from .env file
+load_dotenv()
 
 # Setup logging on module import
 LOG_LEVEL = os.getenv("LOG_LEVEL", "INFO")
 LOG_FILE = os.getenv("LOG_FILE", None)
 JSON_LOGS = os.getenv("JSON_LOGS", "false").lower() == "true"
+ENABLE_DETAILED_LOGGING = os.getenv("ENABLE_DETAILED_LOGGING", "false").lower() == "true"
+CORS_ORIGINS = os.getenv("CORS_ORIGINS", "http://localhost:5173").split(",")
 
 setup_logging(
     log_level=LOG_LEVEL,
@@ -57,32 +64,45 @@ def create_app() -> FastAPI:
         """Apply rate limiting to all requests."""
         return await rate_limit_middleware(request, call_next)
 
-    # Request logging middleware
-    @app.middleware("http")
-    async def log_requests(request: Request, call_next: Callable) -> Response:
-        """Log all HTTP requests with timing."""
-        start_time = time.time()
-
-        # Process request
-        response = await call_next(request)
-
-        # Calculate duration
-        duration_ms = (time.time() - start_time) * 1000
-
-        # Log request
-        log_request(
-            method=request.method,
-            path=request.url.path,
-            status_code=response.status_code,
-            duration_ms=duration_ms,
+    # Logging middleware - Enhanced or Basic
+    if ENABLE_DETAILED_LOGGING:
+        # Enhanced logging with request/response bodies, headers, etc.
+        logger.info("Using DETAILED logging mode (captures request/response bodies)")
+        app.add_middleware(
+            DetailedLoggingMiddleware,
+            log_request_body=True,
+            log_response_body=True,
+            log_headers=True,
+            max_body_length=10000,
+            exclude_paths=["/health", "/metrics"],
         )
+    else:
+        # Basic logging (lightweight)
+        @app.middleware("http")
+        async def log_requests(request: Request, call_next: Callable) -> Response:
+            """Log all HTTP requests with timing."""
+            start_time = time.time()
 
-        return response
+            # Process request
+            response = await call_next(request)
 
-    # CORS middleware
+            # Calculate duration
+            duration_ms = (time.time() - start_time) * 1000
+
+            # Log request
+            log_request(
+                method=request.method,
+                path=request.url.path,
+                status_code=response.status_code,
+                duration_ms=duration_ms,
+            )
+
+            return response
+
+    # CORS middleware (uses environment variable)
     app.add_middleware(
         CORSMiddleware,
-        allow_origins=["http://localhost:5173"],
+        allow_origins=CORS_ORIGINS,
         allow_credentials=True,
         allow_methods=["*"],
         allow_headers=["*"],

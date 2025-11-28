@@ -95,6 +95,25 @@ class StructuredFormatter(logging.Formatter):
         # Build log line
         log_line = f"{timestamp_str} | {level_str} | {name_str:30} | {message}"
 
+        # Add extra data fields if present
+        if hasattr(record, "extra_data") and record.extra_data:
+            extra_fields = []
+            for key, value in record.extra_data.items():
+                # Format value (truncate long strings, format dicts/lists)
+                if isinstance(value, (dict, list)):
+                    value_str = json.dumps(value, ensure_ascii=False)
+                    if len(value_str) > 200:
+                        value_str = value_str[:200] + "..."
+                else:
+                    value_str = str(value)
+                    if len(value_str) > 200:
+                        value_str = value_str[:200] + "..."
+
+                extra_fields.append(f"{key}={value_str}")
+
+            if extra_fields:
+                log_line += f"\n    {' | '.join(extra_fields)}"
+
         # Add exception if present
         if record.exc_info:
             exc_text = self.formatException(record.exc_info)
